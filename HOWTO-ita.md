@@ -1,32 +1,15 @@
 
-# oVirt Italia: Heretic oVirt Project - Il recap dell'incontro BgLUG
+# Heretic oVirt Project - HOWTO
 
-[ ![oVirt Italia][1] ][2]
+## Introduzione
 
-È l'ora di oVirt! Nel datacenter non c'è più bisogno di VMware.
+###  Cosa riguarda 
 
-* [Blog home][2]
-* [Che cos'è oVirt?][3]
-* [VMware e oVirt a confronto][4]
-* [Prova subito oVirt Live][5]
-
-[ ![][6] ][7]
-
-## venerdì 1 settembre 2017
-
-###  Heretic oVirt Project - Il recap dell'incontro BgLUG 
-
-Mercoledì 2 agosto, nella sede del [BgLUG][8] presso [FABLAB][9] a Bergamo, si è tenuta una presentazione/demo live sull'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una soluzione oVirt&nbsp;con Self Hosted Engine (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa) ed&nbsp;iperconvergente (ovvero con storage Gluster fornito dalle stesse macchine fisiche che fanno virtualizzazione) resistente ai singoli guasti.  
-  
-L'incontro ha registrato il pieno nella sala messa a disposizione e, nonostante il caldo e alcuni inconvenienti tecnici nella parte live, l'interesse della platea è parso decisamente elevato.  
-  
-  
+Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su oVirt&nbsp;con Self Hosted Engine (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa) ed&nbsp;iperconvergente (ovvero con storage Gluster fornito dalle stesse macchine fisiche che fanno virtualizzazione) resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite OVN, basato su Openvswitch).  
   
 
 ###  Il progetto HVP
 
-  
-Andrea Flori ed io abbiamo presentato un progetto, chiamato provocatoriamente **Heretic oVirt Project**, volto a produrre una soluzione interamente automatizzata per realizzare, partendo appunto da zero, un'infrastruttura aziendale completa basata su [oVirt][10]/[RHV][11] e tecnologie collegate: [CentOS][12]/[RHEL][13], [oVirt Node][14]/[RHVH][15],&nbsp;[Gluster][16]/[RHGS][17], [OVN][18], [CTDB][19], [Samba][20], [NFS-Ganesha][21].  
   
 Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire (in questo senso, essendo tutto, dalla virtualizzazione, allo storage, al networking realizzato in software si può dire alla fine di avere un "Software Defined Data center": SDDC) a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
   
@@ -40,42 +23,62 @@ e lo sviluppo software avviene su Github:
   
 Il motivo della denominazione "**Heretic**" (e del nome scherzoso usato per il sito) sta nella scelta di usare alcune delle tecnologie sopra citate in una maniera che non è quella ritenuta correntemente "ortodossa", o meglio "supportabile formalmente" (i punti "eretici" verranno _evidenziati_ nel seguito).  
   
-Per dissipare i timori su questo punto, ci siamo brevemente soffermati sul fatto che chi deve fornire _garanzie contrattuali_ sul supporto e deve farlo "facendo tornare i conti" _economicamente su larga scala_ (ad esempio: Red Hat) ha necessariamente (e ben comprensibilmente) un approccio più "cauto" nel limitare le modalità di configurazione sulle quali formalmente fornisce supporto, ma la comunità o gli integratori (magari più "piccoli ed agguerriti" rispetto a Red Hat), proprio per le possibilità insite nella natura del _software libero_, possono dimostrare concretamente come il limite possa essere spostato (anche se speriamo vivamente che si tratti solo di un "_anticipare un poco i tempi_").  
-  
 
 ###  La parte hardware
 
   
-Sul banco della demo erano presenti:  
+Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, che rappresentano un esempio di cosa si può usare per realizzare (o anche semplicemente sperimentare) il nostro progetto.
 
-* 3&nbsp;HPE Microserver&nbsp;ognuno opportunamente configurato con:
+
+#### Setup fisico 1
+
+* 3&nbsp;HPE Microserver&nbsp;G7 ognuno opportunamente configurato con:
     * 1 disco&nbsp;SATA per sistema operativo da 500 GiB
     * 3 dischi SATA per dati da 4 TiB (solo 1 disco SATA per dati da 2 TiB sull'ultimo server)
     * 16 GiB di RAM (solo 12 GiB di RAM sull'ultimo server)
     * una scheda con 4 porte di rete Gigabit aggiuntive
 * 1 PC generico composto da:
-    * un qualunque desktop anche non nuovissimo (noi avevamo un HPE Pavillion di circa 5 anni)
-    * 3 porte di rete (ottenibili o con schede aggiuntive o con adattatori Ethernet-USB, quindi anche un portatile può essere usato per tale ruolo)
-* 2 switch di rete Gigabit
+    * un HPE Pavillion di circa 5 anni con 6 GiB di RAM e processore Core2 Duo
+    * 3 porte di rete (1 integrata e 2 su schede Gigabit aggiuntive)
+* 2 switch di rete Gigabit (uno dei quali compatibile con Jumbo-Frame)
 * il necessario gomitolo di cavi
   
-Lo scopo del PC generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, se ne possa tranquillamente "tornare a casa" assieme a chi installa :-D  
+#### Setup fisico 2
+
+* 3&nbsp;HPE Microserver&nbsp;G8 ognuno opportunamente configurato con:
+    * 1 disco&nbsp;SATA per sistema operativo da 500 GiB
+    * 3 dischi SATA per dati da 4 TiB (solo 1 disco SATA per dati da 2 TiB sull'ultimo server)
+    * 16 GiB di RAM
+    * una scheda con 4 porte di rete Gigabit aggiuntive
+* 1 PC generico composto da:
+    * un Dell di circa 5 anni con 2 GiB di RAM e processore Core2 Duo
+    * 5 porte di rete (1 integrata, 1 su scheda Gigabit aggiuntiva e 3 con adattatori Ethernet-USB)
+* 1 switch di rete Gigabit (compatibile con Jumbo-Frame, VLAN e LACP)
+* il necessario gomitolo di cavi
+  
+#### Setup virtuale
+
+* 3&nbsp;macchine&nbsp;virtuali ognuno opportunamente configurato con:
+    * 1 disco&nbsp;virtuale per sistema operativo da 64 GiB
+    * 2 dischi virtuali per dati da 200 GiB (solo 1 disco per dati da 200 GiB sull'ultima macchina)
+    * 4 GiB di RAM e 2 core
+    * 4 porte di rete
+* 1 macchina virtuale desktop composta da:
+    * 2 GiB di RAM e 1 core
+    * 5 porte di rete
+* 1 LAN virtuale in NAT e 4 segmenti LAN virtuali isolati
+  
+Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.  
   
 
 ###  Le tecnologie di automazione
 
   
-La presentazione è iniziata indicando in che senso e come avvenisse la completa automazione da zero (o, come si suol dire, da "bare metal" ovvero dall'hardware "vuoto" appena comprato/riciclato) per tutto quanto presente sul banco.  
-  
-Abbiamo premesso subito che non abbiamo "inventato" nulla: quanto da noi realizzato è già oggi ottenibile in maniera "manuale" (se vi sono già delle automazioni preconfezionate complete, noi non ne siamo a conoscenza), ma richiede un numero considerevole di nozioni, scelte ed interventi tra di loro altamente correlati e con elevata probabilità di errori, omissioni ed improprietà.  
-Come si diceva un tempo, se abbiamo ottenuto qualcosa in più è solo perché "siamo nani sulle spalle di giganti" :-)  
-  
 La nostra soluzione si basa:  
 
 * per la parte iniziale sull'assodata tecnologia di automazione dell'installazione presente in CentOS/Fedora/RHEL: **Kickstart**
 * per la parte successiva su nuove tecnologie di automazione della configurazione: **gDeploy** e **Ansible**
-Abbiamo quindi brevemente introdotto queste tecnologie per chi non ne avesse già sentito parlare.  
-  
+
 
 ####  Kickstart
 
@@ -97,7 +100,9 @@ Si tratta di un sistema assolutamente generico di gestione della configurazione 
 Si tratta di un sistema di automazione della creazione di infrastrutture Gluster/RHGS che, basandosi su di una descrizione testuale (un file in formato INI) dello stato desiderato (nomi/IP delle macchine che devono comporre il trusted pool, configurazione dei dischi tramite LVM su ogni macchina, formattazione dei logical volume per ottenere i brick, creazione dei volumi Gluster a partire dai brick), genera automaticamente i playbook Ansible (vedi sopra) per ottenere quanto descritto.  
   
   
-  
+#### Come combiniamo le tecnologie di automazione tra loro
+
+
 Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi identificate dalle direttive&nbsp;%pre e %post) degli script in&nbsp;Bash&nbsp;che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri&nbsp;custom&nbsp;(per modificare i valori di default da noi scelti) passati tramite la&nbsp;commandline&nbsp;del&nbsp;kernel&nbsp;all'avvio, effettuano un&nbsp;autoriconoscimento&nbsp;e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti&nbsp;storage&nbsp;(come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine&nbsp;oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best&nbsp;practices" pubblicate) e così via.  
   
 Tali configurazioni automatiche non si fermano a quanto necessario in fase di installazione, ma creano e fanno trovare pronti anche i file di configurazione necessari ad attivare ex-novo funzionalità ulteriori non usualmente presenti nelle installazioni interattive, in particolare un sistema autosufficiente di risoluzione dei nomi di rete (DNS) sia locali (quelli dei sistemi che andiamo ad installare/creare) sia Internet.  
@@ -105,18 +110,12 @@ Tali configurazioni automatiche non si fermano a quanto necessario in fase di in
 Il nostro caso d'uso tipico è infatti una realtà non necessariamente strutturata, ovverosia non supponiamo di trovarci in un'azienda che inserisca la nostra soluzione in un'architettura già completa quantomeno dei servizi base, quindi abbiamo aggiunto nella nostra soluzione funzionalità che permettono di partire "da zero" anche per quanto riguarda l'ambiente di rete aziendale: quello che avevamo sul banco è quello che serve, nient'altro è "nascosto/ipotizzato" (a parte un collegamento Internet).  
 
   
-Ci siamo a questo punto scusati per lo stato attuale della documentazione del progetto, al momento consistente solo ed esclusivamente nei commenti interni ai file di Kickstart; tali commenti sono scritti in inglese (per motivi di generalità, ma non temete: è un inglese "de' noaltri" :-D ) e sono marcati dalla dicitura&nbsp;TODO&nbsp;per le parti che indicano bug/mancanze e&nbsp;Note&nbsp;per le parti che indicano qualcosa cui porre attenzione.  
-  
-
-![][22]
-
-  
 
 ###  Il procedimento concreto
 
   
 
-Siamo quindi passati ad illustrare il procedimento concreto.  
+Passiamo ad illustrare il procedimento concreto.  
   
 
 ####  Il PC di supporto
@@ -155,9 +154,6 @@ Al termine dell'installazione il PC di supporto sarà immediatamente pronto a fo
 * Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutte le macchine)
   
   
-Dalla platea (Simone Tiraboschi) è venuto il suggerimento di rimpiazzare queste funzioni realizzate ad-hoc con un sistema _Red Hat Satellite_: l'idea è interessante ed il motivo per cui non è stato usato è solo che per abitudine il Satellite lo si è sempre visto come parte "permanente" di una infrastruttura aziendale, non qualcosa che arriva per installare e se ne va alla fine per essere a sua volta reinstallato da zero per la realizzazione successiva, ma abbiamo promesso che valuteremo con maggiore attenzione il suggerimento (come controbattuto da Simone, infatti, nulla vieta di usare il Satellite in questo modo "transitorio").  
-  
-
 ####  I server
 
   
@@ -171,10 +167,6 @@ Eventuali schede hardware di gestione remota dei server (le iLO, nei casi dei se
 L'installazione concreta delle macchine server si prevede che avvenga tramite boot da rete (PXE), il che significa che sulle macchine server l'opzione di boot da rete deve essere attivata da firmware (BIOS o UEFI) e ci deve essere almeno una delle porte di rete predisposte al boot (quali siano dipende di nuovo dal firmware, ma la prima di quelle incorporate di solito è una scelta sicura) connessa alla rete di gestione sopra citata (ovvero: connessa al relativo switch dedicato o VLAN) ed opportunamente identificata (ne dovrà essere individuato il nome Linux, ad esempio tramite un avvio preventivo dalla voce di menu PXE relativa alla modalità&nbsp;rescue&nbsp;di CentOS7; supporremo nel seguito che tale nome sia&nbsp;em1).  
   
 
-![][23]
-
-  
-  
 La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute; dovrà essere però cura di chi installa modificare tale menu in /var/lib/tftpboot/default&nbsp;per inserire il corretto nome Linux della porta di rete di boot per ogni macchina) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
   
 Dietro le quinte il PC di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre al nome Linux della porta di rete collegata alla rete di gestione, ad esempio con&nbsp;ip=em1:dhcp&nbsp;, ed alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=<https: dangerous.ovirt.life="" hvp-repos="" el7="" ks="" heretic-ngn.ks="">&nbsp;).  
@@ -187,8 +179,6 @@ Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre c
   
 Terminata l'installazione delle tre macchine server, si potrà procedere con la configurazione automatizzata delle funzionalità vere e proprie.  
 Ci abbiamo tenuto a specificare che, in qualunque "punto fermo" raggiunto dall'automazione, è sempre possibile fermarsi ed ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto si potrebbe accedere via web dal PC di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
-  
-Giunti a questo punto la presentazione concreta in sala si è esaurita per raggiunti limiti di tempo (complici anche le difficoltà tecniche cui si era accennato, che hanno pure reso ahinoi poco "visibile" anche quanto sopra), ma è stata comunque delineata a voce la fase successiva.  
   
 La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
 
@@ -205,8 +195,6 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
     4. altre vm opzionali (desktop virtuali CentOS7 o Windows10, server gestionali che si appoggino al DB server di cui sopra, tutte membri del dominio Active Directory di cui sopra)
 L'avvio (come utente root dal PC di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con&nbsp;ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml&nbsp;), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
-Quanto qui sopra elencato sopra a livello di automazione della configurazione finale è reso possibile unicamente dal notevole lavoro di supporto a oVirt incluso in Ansible 2.3 ed ai chiarissimi ed articolati esempi di playbook realizzati da Simone Tiraboschi.  
-  
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
   
 Sottolineiamo il fatto che la presentazione ed i test compiuti finora hanno riguardato insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale (tramite modifica alle logiche di creazione del file gDeploy) di infrastrutture basate su **4 e più macchine server** e pure il supporto al più spinoso problema di espandere a 4 e più macchine server una infrastruttura inizialmente creata con 3 macchine server.  
@@ -221,83 +209,19 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
 ###  Conclusione
 
   
-A conclusione di questo riassunto (che, me ne scuso, probabilmente omette altro che è stato detto, di passaggio o in forma di domande/risposte salutandosi all'uscita) ricordo che abbiamo anche promesso di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
+A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
 
 1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota, ma la gentilissima offerta da parte di Stefano Stagnaro di questo spazio ci permette di onorare, almeno in parte, la promessa, per di più in italiano, mentre come indicato all'incontro tutta la documentazione ed i commenti sono e saranno, a meno di offerte di aiuto esterne, sempre in inglese per motivi di generalità);
 2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC di supporto e darle vita propria in un apposito repository Github;
 3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione **dei pacchetti oVirt non community, bensì presi dai sorgenti **di RHV** (l'oVirt con supporto a pagamento offerto da Red Hat) per motivi di estensione del ciclo di vita utile.
   
-Concludo indicando che tra gli ulteriori sviluppi futuri (oltre a tutto quanto già sopra indicato ed annunciato durante la presentazione) c'è l'aggiunta di soluzioni integrate di:  
+Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
 
 * **backup **(usando il software libero [Bareos][27], di nuovo da ricompilare in una versione mantenuta aggiornata);
 * **monitoraggio **(accentramento dei log e/o integrazione con le soluzioni di "Metrics Store"&nbsp;[in corso di sviluppo in oVirt][28]);
 * **spegnimento totale non presidiato** a seguito di eventi esterni (si pensi al caso di piccole realtà con UPS singoli, o anche centralizzati, ma senza la garanzia di alimentazione ininterrotta tramite generatori ecc.).
   
   
-Ringraziamo nuovamente tutti i partecipanti alla serata e ringraziamo in particolare anche Stefano Stagnaro per averci offerto qui la possibilità di ricapitolare (e magari chiarire) il contenuto della presentazione per chi quella sera fosse stato (comprensibilmente) ostacolato nel seguire dalle mie scarse doti oratorie, dal caldo e dagli inconvenienti tecnici e anche per chi non avesse avuto modo di partecipare.  
-  
-
-Pubblicato da  [ Giuseppe Ragusa ][29] a  [02:02][30] [ ![][31] ][32]
-
-[Invia tramite email][33][Postalo sul blog][34][Condividi su Twitter][35][Condividi su Facebook][36][Condividi su Pinterest][37]
-
-[Post più vecchio][38] [Home page][2]
-
-Iscriviti a: [Commenti sul post (Atom)][39]
-
-## Prossimi eventi
-
-28 ottobre 2017 ore 11.00 → 12.00
-
-### [ Hyperconverged Infrastructure con oVirt+GlusterFS+Ansible][40]
-
-_Università degli Studi di Milano, dip. Informatica, Aula 4_  
-  
-Realizzare un'infrastruttura iperconvergente dove virtualizzazione, networking e storage vengono erogati da hadrware general purpose, utilizzando software open source di livello enterprise. Verranno descritte le tecnologie coinvolte, le tecniche di deployment e i casi d'uso in produzione con l'ausilio di una demo.  
-  
-
-## [TUTTI GLI EVENTI →][41]
-
-[ ![][6] ][42]
-
-## In quali di queste zone vorresti che si tenesse il prossimo evento di oVirt Italia?
-
-[ ![][6] ][43]
-
-## Archivio blog
-
-* [ ▼&nbsp; ][44] [ 2017 ][45] (3)
-    * [ ▼&nbsp; ][44] [ settembre ][46] (1)
-        * [Heretic oVirt Project - Il recap dell'incontro BgL...][47]
-    * [ ►&nbsp; ][44] [ febbraio ][48] (1)
-    * [ ►&nbsp; ][44] [ gennaio ][49] (1)
-* [ ►&nbsp; ][44] [ 2016 ][50] (2)
-    * [ ►&nbsp; ][44] [ novembre ][51] (1)
-    * [ ►&nbsp; ][44] [ giugno ][52] (1)
-* [ ►&nbsp; ][44] [ 2015 ][53] (4)
-    * [ ►&nbsp; ][44] [ novembre ][54] (2)
-    * [ ►&nbsp; ][44] [ ottobre ][55] (1)
-    * [ ►&nbsp; ][44] [ settembre ][56] (1)
-
-[ ![][6] ][57]
-
-| -----|  
-|  
-
-  |  
-
-  |  
-
-| ----- |
-| 
-
- | 
-
- | 
-
-Tema Fantastico S.p.A.. Powered by [Blogger][58]. 
-
-[ ![][6] ][59]
 
 [1]: http://1.bp.blogspot.com/-ExvH-X8_0pE/VjD27i2QALI/AAAAAAAAOdo/lQj-MO1ilhc/s1600-r/oVirt%2Bitalia.png
 [2]: http://www.ovirt-italia.it/
