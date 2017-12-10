@@ -4,9 +4,7 @@
 
 ###  Cosa riguarda 
 
-Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su oVirt&nbsp;con Self Hosted Engine (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa) ed&nbsp;iperconvergente (ovvero con storage Gluster fornito dalle stesse macchine fisiche che fanno virtualizzazione) resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite OVN, basato su Openvswitch).  
-  
-
+Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10]&nbsp;con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa) ed&nbsp;iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione) resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite [OVN][18]).  
   
 Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire (in questo senso, essendo tutto, dalla virtualizzazione, allo storage, al networking realizzato in software si può dire alla fine di avere un "Software Defined Data center": SDDC) a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
   
@@ -67,7 +65,8 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
     * 5 porte di rete
 * 1 LAN virtuale in NAT e 4 segmenti LAN virtuali isolati
   
-Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.  
+Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
+È stato sperimentato anche un setup misto nel quale il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
   
 
 ##  Le tecnologie di automazione
@@ -75,8 +74,8 @@ Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'inst
   
 La nostra soluzione si basa:  
 
-* per la parte iniziale sull'assodata tecnologia di automazione dell'installazione presente in CentOS/Fedora/RHEL: **Kickstart**
-* per la parte successiva su nuove tecnologie di automazione della configurazione: **gDeploy** e **Ansible**
+* per la parte iniziale sull'assodata tecnologia di automazione dell'installazione presente in CentOS/Fedora/RHEL: **[Kickstart][61]**
+* per la parte successiva su nuove tecnologie di automazione della configurazione: **[gDeploy][62]** e **[Ansible][63]**
 
 
 ####  Kickstart
@@ -102,7 +101,7 @@ Si tratta di un sistema di automazione della creazione di infrastrutture Gluster
 #### Come combiniamo le tecnologie di automazione tra loro
 
 
-Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi identificate dalle direttive&nbsp;%pre e %post) degli script in&nbsp;Bash&nbsp;che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri&nbsp;custom&nbsp;(per modificare i valori di default da noi scelti) passati tramite la&nbsp;commandline&nbsp;del&nbsp;kernel&nbsp;all'avvio, effettuano un&nbsp;autoriconoscimento&nbsp;e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti&nbsp;storage&nbsp;(come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine&nbsp;oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best&nbsp;practices" pubblicate) e così via.  
+Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi identificate dalle direttive&nbsp;%pre e %post) degli script in&nbsp;Bash&nbsp;che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri&nbsp;custom&nbsp;(per modificare i valori di default da noi scelti) passati tramite la&nbsp;commandline&nbsp;del&nbsp;kernel&nbsp;all'avvio (o tramite frammenti di configurazione reperiti assieme al file di Kickstart), effettuano un&nbsp;autoriconoscimento&nbsp;e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti&nbsp;storage&nbsp;(come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine&nbsp;oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best&nbsp;practices" pubblicate) e così via.  
   
 Tali configurazioni automatiche non si fermano a quanto necessario in fase di installazione, ma creano e fanno trovare pronti anche i file di configurazione necessari ad attivare ex-novo funzionalità ulteriori non usualmente presenti nelle installazioni interattive, in particolare un sistema autosufficiente di risoluzione dei nomi di rete (DNS) sia locali (quelli dei sistemi che andiamo ad installare/creare) sia Internet.  
   
@@ -111,18 +110,15 @@ Il nostro caso d'uso tipico è infatti una realtà non necessariamente struttura
   
 
 ##  Il procedimento concreto
-
   
 
 Passiamo ad illustrare il procedimento concreto.  
   
 
 ####  Il PC/VD di supporto
-
   
 Si parte dal collegare il PC/VD di supporto:  
   
-
 * su di una porta di rete (tipicamente quella "principale", incorporata nella macchina, ma ne dovrà essere comunque individuato il nome Linux, ad esempio tramite un avvio preventivo da un DVD Live o dal DVD di installazione medesimo in modalità rescue; supporremo nel seguito che tale nome sia eno1) il PC/VD deve essere collegato ad Internet (ad esempio passando da un router / access point)
 * sulle altre porte di rete il PC/VD deve essere collegato agli switch presenti
   
@@ -130,76 +126,74 @@ In particolare sugli switch dovranno essere realizzate **da una a quattro reti s
 
 1. Se il PC/VD avrà una sola porta di rete aggiuntiva (oltre a quella connessa ad Internet), questa dovrà essere connessa ad una rete separata: quella di **gestione** (ospiterà le comunicazioni tra i server fisici, nel loro ruolo di nodi oVirt, e l'Engine oVirt).
 2. Se il PC/VD avrà anche un'altra porta di rete aggiuntiva (come era durante la nostra presentazione), questa dovrà essere connessa ad una ulteriore rete separata: quella di **Gluster** (ospiterà le comunicazioni di sincronizzazione tra i server fisici nel loro ruolo di nodi Gluster).
-3. Se il PC/VD avrà anche un'ulteriore porta di rete aggiuntiva, questa dovrà essere connessa ad una ulteriore rete separata: quella di **produzione** (per intenderci: quella cui sono connesse le postazioni client degli utenti ed eventuali altri server/apparati presenti, quindi quella su cui si "affacceranno" le virtual machine realizzate ed i servizi di file sharing offerti tramite Samba/NFS-Ganesha dai server fisici).
-4. Se infine il PC/VD avrà anche un'ultima porta di rete aggiuntiva, questa dovrà essere connessa ad una ultima rete separata: quella di **isolamento**&nbsp;(lo scopo di questa rete è in fase di sviluppo).
+3. Se il PC/VD avrà anche un'ulteriore porta di rete aggiuntiva, questa dovrà essere connessa ad una ulteriore rete separata: quella di **produzione** (per intenderci: quella cui sono connesse le postazioni client degli utenti ed eventuali altri server/apparati presenti, quindi quella su cui si "affacceranno" le virtual machine realizzate ed i servizi di file sharing offerti tramite Samba/Gluster-NFS dai server fisici).
+4. Se infine il PC/VD avrà anche un'ultima porta di rete aggiuntiva, questa dovrà essere connessa ad una ultima rete separata: quella di **isolamento**&nbsp;(quella tramite la quale la rete di produzione può essere isolata da Internet e/o da altre reti).
   
-Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel).  
+Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o inserite in appositi file di configurazione).  
   
 Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (abbiamo fatto notare che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nella nostra presentazione avevamo due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
   
-Una parola a questo punto relativa alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF:&nbsp;"single point of failure") sufficiente ad inficiare la resistenza ai guasti; nel nostro esempio per semplicità non lo abbiamo dimostrato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata sempre almeno doppie.  
+Una parola a questo punto relativa alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF:&nbsp;"single point of failure") sufficiente ad inficiare la resistenza ai guasti; nei nostri setup dimostrativi per semplicità non lo abbiamo sempre dimostrato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata sempre almeno doppie.  
   
-Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre al nome Linux della porta di rete collegata ad Internet, ad esempio con ip=eno1:dhcp , ed alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
-Per motivi di tempo, durante la presentazione il PC/VD di supporto era già stato preventivamente installato.  
-  
+Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
   
 Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a fornire alle succitate reti isolate tutti i servizi necessari:  
 
 * DNS (per risolvere i nomi sulle reti isolate e su Internet)
 * NTP (per fornire riferimento orario)
 * DHCP e PXE sulla rete di gestione (per effettuare il boot da rete nelle installazioni successive)
-* Mirror locale del sito HTTP del progetto (per fornire i file necessari ad avviare le installazioni successive)
+* Mirror locale (parziale) del sito HTTP del progetto (per fornire i file necessari ad avviare le installazioni successive)
 * Gateway verso Internet e proxy HTTP trasparente (per accelerare le successive installazioni di pacchetti da Internet)
-* Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutte le macchine)
+* Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutti i server)
   
   
 ####  I server
 
   
 Il passo successivo (da ripetere per ognuna delle macchine server che costituiranno l'infrastruttura permanente) è quello di collegare i server alle reti isolate.  
-A seconda della disponibilità di porte di rete sui server (ma ne è supportata anche solo una, ovviamente perdendo in quel caso la ridondanza), è possibile collegare (sempre arbitrariamente) più di una porta di rete di ogni server alla medesima rete (ovvero switch dedicato o VLAN) e, nella successiva fase di installazione, il Kickstart (unico per tutti i server) riconoscerà ed interpreterà la situazione come un'intenzione di accorpamento dei link per ridondanza e bilanciamento del traffico (il cosiddetto "bonding", con modalità di bonding definite per default e controllabili tramite opzioni da commandline del kernel).  
+A seconda della disponibilità di porte di rete sui server (ma ne è supportata anche solo una, ovviamente perdendo in quel caso la ridondanza), è possibile collegare (sempre arbitrariamente) più di una porta di rete di ogni server alla medesima rete (ovvero switch dedicato o VLAN) e, nella successiva fase di installazione, il Kickstart (unico per tutti i server) riconoscerà ed interpreterà la situazione come un'intenzione di accorpamento dei link per ridondanza e bilanciamento del traffico (il cosiddetto "bonding", con modalità di bonding definite per default e controllabili tramite opzioni da commandline del kernel o da frammento di configurazione).  
   
-L'elenco delle reti supportate è il medesimo indicato nel caso del PC/VD di supporto (ma per i server non conta più l'ordine delle reti, in quanto la presenza appunto del PC/VD di supporto permette al Kickstart di identificare con esattezza a quale rete ogni porta sia connessa) e, nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel).  
+L'elenco delle reti supportate è il medesimo indicato nel caso del PC/VD di supporto (ma per i server non conta più l'ordine delle reti, in quanto la presenza appunto del PC/VD di supporto permette al Kickstart di identificare con esattezza a quale rete ogni porta sia connessa) e, nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o da frammento di configurazione).  
   
 Eventuali schede hardware di gestione remota dei server (le iLO, nei casi dei server HPE come i nostri, o le iDRAC per i server Dell; altri produttori hanno soluzioni analoghe, a volte opzionali, sotto il nome di BMC o schede IPMI) vanno collegate alla rete isolata di gestione ed il PC/VD di supporto può essere utilizzato per accedere alla console remota offerta da tali schede.  
   
 L'installazione concreta delle macchine server si prevede che avvenga tramite boot da rete (PXE), il che significa che sulle macchine server l'opzione di boot da rete deve essere attivata da firmware (BIOS o UEFI) e ci deve essere almeno una delle porte di rete predisposte al boot (quali siano dipende di nuovo dal firmware, ma la prima di quelle incorporate di solito è una scelta sicura) connessa alla rete di gestione sopra citata (ovvero: connessa al relativo switch dedicato o VLAN) ed opportunamente identificata (ne dovrà essere individuato il nome Linux, ad esempio tramite un avvio preventivo dalla voce di menu PXE relativa alla modalità&nbsp;rescue&nbsp;di CentOS7; supporremo nel seguito che tale nome sia&nbsp;em1).  
   
 
-La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute; dovrà essere però cura di chi installa modificare tale menu in /var/lib/tftpboot/default&nbsp;per inserire il corretto nome Linux della porta di rete di boot per ogni macchina) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
+La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
   
-Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre al nome Linux della porta di rete collegata alla rete di gestione, ad esempio con&nbsp;ip=em1:dhcp&nbsp;, ed alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks ).  
+Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks ) e con una serie di frammenti di configurazione creati appositamente.  
   
-Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà l'ultimo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
+Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel o da frammento di configurazione) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà l'ultimo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
   
 
 ####  La configurazione finale
 
   
 Terminata l'installazione delle tre macchine server, si potrà procedere con la configurazione automatizzata delle funzionalità vere e proprie.  
-In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile fermarsi ed ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto si potrebbe accedere via web dal PC/VD di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
+In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto si potrebbe accedere via web dal PC/VD di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
   
 La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC/VD di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
 
-1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing Unix/NFS)
+1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix)
 2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Cockpit)
-3. configurano gli storage domain Gluster in oVirt
+3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e dello vm in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
-5. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verr&agrave; sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
-6. configurano gli storage domain NFS in oVirt
+5. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
+6. configurano gli storage domain NFS in oVirt (essendo esportati dagli IP virtuali gestiti da CTDB, necessitano del passo precedente come prerequisito)
 7. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
-8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questi Kickstart sono ancora in fase di realizzazione):
+8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
     1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;e ricompilato per attivare le funzioni di DC usando le librerie interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
     3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_&nbsp;;-) , SQLServer!)
     4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
-    5. altre vm opzionali (desktop virtuale Windows10, server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN tutte membri del dominio Active Directory di cui sopra)
+    5. altre vm opzionali (server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano Samba come membro del dominio Active Directory di cui sopra
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con&nbsp;ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml&nbsp;), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
   
-Sottolineiamo il fatto che la presentazione ed i test compiuti finora hanno riguardato insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale (tramite modifica alle logiche di creazione del file gDeploy) di infrastrutture basate su **4 e più macchine server** e pure il supporto al più spinoso problema di espandere a 4 e più macchine server una infrastruttura inizialmente creata con 3 macchine server.  
+Sottolineiamo il fatto che i test compiuti finora hanno riguardato insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale (tramite modifica alle logiche di creazione del file gDeploy) di infrastrutture basate su **4 e più macchine server** e pure il supporto al più spinoso problema di espandere a 4 e più macchine server una infrastruttura inizialmente creata con 3 macchine server.  
   
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
@@ -284,3 +278,7 @@ Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di solu
 [57]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive1&amp;action=editWidget§ionId=sidebar-right-1 "Modifica"
 [58]: https://www.blogger.com
 [59]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=Attribution&amp;widgetId=Attribution1&amp;action=editWidget§ionId=footer-3 "Modifica"
+[60]: https://www.ovirt.org/documentation/self-hosted/Self-Hosted_Engine_Guide/
+[61]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations
+[62]: https://github.com/gluster/gdeploy
+[63]: https://www.ansible.com/
