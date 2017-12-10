@@ -208,8 +208,8 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
 A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
 
 1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota, ma la gentilissima offerta da parte di Stefano Stagnaro di questo spazio ci permette di onorare, almeno in parte, la promessa, per di più in italiano, mentre come indicato all'incontro tutta la documentazione ed i commenti sono e saranno, a meno di offerte di aiuto esterne, sempre in inglese per motivi di generalità);
-2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC/VD di supporto e darle vita propria in un apposito repository Github;
-3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione **dei pacchetti oVirt non community, bensì presi dai sorgenti **di RHV** (l'oVirt con supporto a pagamento offerto da Red Hat) per motivi di estensione del ciclo di vita utile.
+2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC/VD di supporto e darle vita propria nell'[apposito repository Github][64];
+3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione** dei pacchetti oVirt non community, bensì presi dai sorgenti **di RHV** (l'oVirt con supporto a pagamento offerto da Red Hat) per motivi di estensione del ciclo di vita utile.
   
 Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
 
@@ -282,3 +282,4 @@ Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di solu
 [61]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations
 [62]: https://github.com/gluster/gdeploy
 [63]: https://www.ansible.com/
+[64]: https://github.com/Heretic-oVirt/ansible
