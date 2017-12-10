@@ -23,7 +23,7 @@ https://github.com/Heretic-oVirt
 Il motivo della denominazione "**Heretic**" (e del nome scherzoso usato per il sito) sta nella scelta di usare alcune delle tecnologie sopra citate in una maniera che non è quella ritenuta correntemente "ortodossa", o meglio "supportabile formalmente" (i punti "eretici" verranno _evidenziati_ nel seguito).  
   
 
-###  La parte hardware
+##  La parte hardware
 
   
 Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, che rappresentano un esempio di cosa si può usare per realizzare (o anche semplicemente sperimentare) il nostro progetto.
@@ -70,7 +70,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
 Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.  
   
 
-###  Le tecnologie di automazione
+##  Le tecnologie di automazione
 
   
 La nostra soluzione si basa:  
@@ -110,7 +110,7 @@ Il nostro caso d'uso tipico è infatti una realtà non necessariamente struttura
 
   
 
-###  Il procedimento concreto
+##  Il procedimento concreto
 
   
 
@@ -168,7 +168,7 @@ L'installazione concreta delle macchine server si prevede che avvenga tramite bo
 
 La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute; dovrà essere però cura di chi installa modificare tale menu in /var/lib/tftpboot/default&nbsp;per inserire il corretto nome Linux della porta di rete di boot per ogni macchina) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
   
-Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre al nome Linux della porta di rete collegata alla rete di gestione, ad esempio con&nbsp;ip=em1:dhcp&nbsp;, ed alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life=/hvp-repos/el7/ks/heretic-ngn.ks ).  
+Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre al nome Linux della porta di rete collegata alla rete di gestione, ad esempio con&nbsp;ip=em1:dhcp&nbsp;, ed alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks ).  
   
 Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà l'ultimo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
   
@@ -177,21 +177,24 @@ Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre c
 
   
 Terminata l'installazione delle tre macchine server, si potrà procedere con la configurazione automatizzata delle funzionalità vere e proprie.  
-Ci abbiamo tenuto a specificare che, in qualunque "punto fermo" raggiunto dall'automazione, è sempre possibile fermarsi ed ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto si potrebbe accedere via web dal PC/VD di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
+In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile fermarsi ed ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto si potrebbe accedere via web dal PC/VD di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
   
 La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC/VD di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
 
 1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing Unix/NFS)
-2. configurano ed avviano i servizi CTDB e Samba (a breve anche NFS-Ganesha e Gluster-block) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
-3. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Cockpit)
-4. configurano gli storage domain e le reti aggiuntive in oVirt
-5. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
-6. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
-7. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questi Kickstart sono ancora in fase di realizzazione):
+2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Cockpit)
+3. configurano gli storage domain Gluster in oVirt
+4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
+5. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verr&agrave; sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
+6. configurano gli storage domain NFS in oVirt
+7. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
+8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questi Kickstart sono ancora in fase di realizzazione):
     1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;e ricompilato per attivare le funzioni di DC usando le librerie interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
     3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_&nbsp;;-) , SQLServer!)
-    4. altre vm opzionali (desktop virtuali CentOS7 o Windows10, server gestionali che si appoggino al DB server di cui sopra, tutte membri del dominio Active Directory di cui sopra)
+    4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
+    5. altre vm opzionali (desktop virtuale Windows10, server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN tutte membri del dominio Active Directory di cui sopra)
+9. riconfigurano Samba come membro del dominio Active Directory di cui sopra
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con&nbsp;ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml&nbsp;), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
@@ -205,7 +208,7 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
   
   
 
-###  Conclusione
+##  Conclusione
 
   
 A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
