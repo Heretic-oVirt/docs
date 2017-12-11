@@ -162,7 +162,7 @@ L'installazione concreta delle macchine server si prevede che avvenga tramite bo
 
 La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
   
-Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks ) e con una serie di frammenti di configurazione creati appositamente.  
+Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks che permetterà alla logica del Kickstart di individuare i frammenti di configurazione creati automaticamente).  
   
 Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel o da frammento di configurazione) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà l'ultimo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
   
@@ -207,9 +207,9 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
   
 A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
 
-1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota, ma la gentilissima offerta da parte di Stefano Stagnaro di questo spazio ci permette di onorare, almeno in parte, la promessa, per di più in italiano, mentre come indicato all'incontro tutta la documentazione ed i commenti sono e saranno, a meno di offerte di aiuto esterne, sempre in inglese per motivi di generalità);
+1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota);
 2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC/VD di supporto e darle vita propria nell'[apposito repository Github][64];
-3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione** dei pacchetti oVirt non community, bensì presi dai sorgenti **di RHV** (l'oVirt con supporto a pagamento offerto da Red Hat) per motivi di estensione del ciclo di vita utile.
+3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** (l'oVirt con supporto a pagamento offerto da Red Hat) per motivi di estensione del ciclo di vita utile.
   
 Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
 
