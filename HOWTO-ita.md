@@ -107,7 +107,8 @@ Tali configurazioni automatiche non si fermano a quanto necessario in fase di in
   
 Il nostro caso d'uso tipico è infatti una realtà non necessariamente strutturata, ovverosia non supponiamo di trovarci in un'azienda che inserisca la nostra soluzione in un'architettura già completa quantomeno dei servizi base, quindi abbiamo aggiunto nella nostra soluzione funzionalità che permettono di partire "da zero" anche per quanto riguarda l'ambiente di rete aziendale: quello che avevamo sul banco è quello che serve, nient'altro è "nascosto/ipotizzato" (a parte un collegamento Internet).  
 
-  
+Al termine delle installazioni automatizzate tramite Kickstart di PC/VD di supporto e dei server, gDeploy ed Ansible vengono usati per orchestrare automaticamente le configurazioni successive che creeranno le funzionalità di storage, virtualizzazione, networking e le virtual machine specifiche che forniranno alla rete aziendale i rimanenti servizi.
+
 
 ##  Il procedimento concreto
   
@@ -121,6 +122,8 @@ Si parte dal collegare il PC/VD di supporto:
   
 * su di una porta di rete (tipicamente quella "principale", incorporata nella macchina, ma ne dovrà essere comunque individuato il nome Linux, ad esempio tramite un avvio preventivo da un DVD Live o dal DVD di installazione medesimo in modalità rescue; supporremo nel seguito che tale nome sia eno1) il PC/VD deve essere collegato ad Internet (ad esempio passando da un router / access point)
 * sulle altre porte di rete il PC/VD deve essere collegato agli switch presenti
+
+##### Le reti
   
 In particolare sugli switch dovranno essere realizzate **da una a quattro reti separate** (ovverosia isolate tra di loro e da tutto il resto, Internet incluso, o perché realizzate su più&nbsp;switch&nbsp;semplici distinti e non collegati o perché realizzate tramite VLAN su switch più sofisticati):  
 
@@ -132,9 +135,13 @@ In particolare sugli switch dovranno essere realizzate **da una a quattro reti s
 Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o inserite in appositi file di configurazione).  
   
 Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (abbiamo fatto notare che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nella nostra presentazione avevamo due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
-  
+
+##### La resistenza ai guasti
+
 Una parola a questo punto relativa alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF:&nbsp;"single point of failure") sufficiente ad inficiare la resistenza ai guasti; nei nostri setup dimostrativi per semplicità non lo abbiamo sempre dimostrato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata sempre almeno doppie.  
-  
+
+##### L'installazione
+
 Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
   
 Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a fornire alle succitate reti isolate tutti i servizi necessari:  
@@ -159,7 +166,6 @@ Eventuali schede hardware di gestione remota dei server (le iLO, nei casi dei se
   
 L'installazione concreta delle macchine server si prevede che avvenga tramite boot da rete (PXE), il che significa che sulle macchine server l'opzione di boot da rete deve essere attivata da firmware (BIOS o UEFI) e ci deve essere almeno una delle porte di rete predisposte al boot (quali siano dipende di nuovo dal firmware, ma la prima di quelle incorporate di solito è una scelta sicura) connessa alla rete di gestione sopra citata (ovvero: connessa al relativo switch dedicato o VLAN) ed opportunamente identificata (ne dovrà essere individuato il nome Linux, ad esempio tramite un avvio preventivo dalla voce di menu PXE relativa alla modalità&nbsp;rescue&nbsp;di CentOS7; supporremo nel seguito che tale nome sia&nbsp;em1).  
   
-
 La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute) e l'unica scelta interattiva da compiere sarà selezionare l'identità della macchina che si sta installando (identificata come "Node 0", "Node 1" o "Node 2"), premere invio ed attendere il prompt ad installazione terminata (per motivi pratici, il primo riavvio dopo l'installazione dei server è seguito da un successivo riavvio automatico entro un minuto e non siamo ancora riusciti ad inibire il messaggio di login nell'intermezzo: si consiglia quindi di attendere un paio di minuti prima di accedere).  
   
 Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks che permetterà alla logica del Kickstart di individuare i frammenti di configurazione creati automaticamente).  
