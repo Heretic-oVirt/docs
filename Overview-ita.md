@@ -195,6 +195,7 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
     4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
     5. altre vm opzionali (server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano Samba come membro del dominio Active Directory di cui sopra
+
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con&nbsp;ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml&nbsp;), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
