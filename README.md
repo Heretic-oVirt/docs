@@ -2,7 +2,7 @@
 
 This repository will contain the documentation for Heretic oVirt Project:
 
-* Goals of the project
+* Overview of the project
 
 * Quick HOWTO for the use of the kickstarts and Ansible files
 
