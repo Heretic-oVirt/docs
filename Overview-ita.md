@@ -1,4 +1,4 @@
-# Heretic oVirt Project - HOWTO
+# Heretic oVirt Project - Panoramica (Overview)
 
 ## Introduzione
 
