@@ -170,7 +170,7 @@ La macchina server avviata da rete presenterà un menu di boot con voci precompi
   
 Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite Kickstart con una riga di comando del kernel contenente i succitati parametri custom (oltre alla collocazione del suddetto Kickstart, ad esempio con&nbsp;inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heretic-ngn.ks che permetterà alla logica del Kickstart di individuare i frammenti di configurazione creati automaticamente).  
   
-Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel o da frammento di configurazione) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà l'ultimo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
+Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel o da frammento di configurazione) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà il primo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
   
 
 ####  La configurazione finale
@@ -183,7 +183,7 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 
 1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix)
 2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Cockpit)
-3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e dello vm in esso contenuta)
+3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
 5. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
 6. configurano gli storage domain NFS in oVirt (essendo esportati dagli IP virtuali gestiti da CTDB, necessitano del passo precedente come prerequisito)
