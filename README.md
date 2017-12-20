@@ -1,6 +1,6 @@
 # Docs repository
 
-This repository will contain the documentation for Heretic oVirt Project:
+This repository contains the documentation for Heretic oVirt Project:
 
 * Overview of the project
 
