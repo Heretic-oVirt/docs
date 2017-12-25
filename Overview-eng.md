@@ -61,7 +61,7 @@ Our laboratory environment contains three different setups, two physical and one
     * 2 x 200 GiB virtual disks dedicated to data (only 1 x 200 GiB virtual disk for data on the last server)
     * 4 GiB RAM and 2 CPU cores (with support for nested virtualization)
     * 4 x virtual network adapters
-* 1 desktop virtual machine made of:
+* 1 virtual desktop machine made of:
     * 2 GiB RAM and 1 CPU core
     * 5 x virtual network adapters
 * 1 virtuale LAN in NAT mode and 4 isolated virtual LAN segments
@@ -137,7 +137,7 @@ Obviously, if less than 4 separate networks are available, then the communicatio
 
 ##### Fault tolerance
 
-Poche parole relative alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (3 e non 2 per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF:&nbsp;"single point of failure") sufficiente ad inficiare la resistenza ai guasti; nei nostri setup dimostrativi per semplicità non lo abbiamo sempre dimostrato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata sempre almeno doppie.  
+A few words on fault tolerance: to have a fault-tolerant solution (and we always mean tolerant to a single fault at a time) all base components must be redundant; we have at least 3 servers (3 and not 2 to always have a qualified majority, ie a "quorum") in our infrastructure, but obviously the use of single switches (eg one single switch for each separated network or a single VLAN-capable switch for all separated networks) would represent a single weak point (SPOF:&nbsp;"single point of failure") which would be enough to invalidate the fault-tolerance of the whole infrastructure; our example setups do not include that for simplicity, but all switches should always be double and stacked (2 stacked switches for each separated network or 2 stacked VLAN-capable switches for all separated networks) and all server network ports should always be connected to separated networks at least in pairs.  
 
 ##### The installation
 
