@@ -1,6 +1,6 @@
 # Docs repository
 
-This repository contains the documentation for Heretic oVirt Project:
+This repository contains the documentation for the Heretic oVirt Project:
 
 * Overview of the project
 
@@ -8,4 +8,4 @@ This repository contains the documentation for Heretic oVirt Project:
 
 * Detailed description of the logic behind
 
-
+All documents are usually available both in English (eng) and Italian (ita) language.
