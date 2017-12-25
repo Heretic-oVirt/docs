@@ -141,16 +141,16 @@ A few words on fault tolerance: to have a fault-tolerant solution (and we always
 
 ##### The installation
 
-Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
+Once the installation of the support PC/VD (this too managed by a dedicated Kickstart) has been started (eg from a standard CentOS7 DVD), after having optionally specified on the kernel commandline (apart from the location of the aforementioned Kickstart, for example with inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks) any custom parameters (all prefixed with hvp_; the complete list with explanation and default values is provided in the comments at the top of each Kickstart file), you need only to wait for the automatic restart to find yourself in front of the classic CentOS7 GNOME3 graphical login (username and password to login are customizable and default values are documented in the internal Kickstart comments).
   
-Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a fornire alle succitate reti isolate tutti i servizi necessari:  
+At the end of the installation, the support PC/VD will be immediately ready to provide all the needed services to the aforementioned separated networks:
 
-* DNS (per risolvere i nomi sulle reti isolate e su Internet)
-* NTP (per fornire riferimento orario)
-* DHCP e PXE sulla rete di gestione (per effettuare il boot da rete nelle installazioni successive)
-* Mirror locale (parziale) del sito HTTP del progetto (per fornire i file necessari ad avviare le installazioni successive)
-* Gateway verso Internet e proxy HTTP trasparente (per accelerare le successive installazioni di pacchetti da Internet)
-* Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutti i server)
+* DNS (for name resolution on the separated network and on the Internet)
+* NTP (for time reference)
+* DHCP and PXE on the management network (for network boot during the following installations)
+* A local mirror (partial) of the HTTP site of the project (to provide the files needed for the following installations)
+* A gateway towards the general Internet and a transparent HTTP proxy (to speed up package installations from the Internet)
+* A repository for Bash scripts and Ansible playbooks to automate the final phase of the configuration process (after all servers have been installed)
   
   
 ####  The servers
