@@ -212,13 +212,13 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
 ##  Conclusione
 
   
-A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
+A conclusione ricordiamo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
 
 1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota);
 2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC/VD di supporto e darle vita propria nell'[apposito repository Github][64];
 3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** (l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
   
-Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
+Concludiamo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
 
 * **backup** (usando il software libero [Bareos][27], di nuovo da ricompilare in una versione mantenuta aggiornata);
 * **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store"&nbsp;[in corso di sviluppo in oVirt][28]);
