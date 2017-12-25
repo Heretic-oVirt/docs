@@ -6,7 +6,7 @@
 
 This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10]&nbsp;with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated network functions (by means of [OVN][18]).
 
-By "_complete enterprise infrastructure_" we mean a solution based on standard hardware (64 bit Intel/AMD compatible machines, absolutely off-the-shelf) which _using free software provides all functionalities_ needed (so, by realizing everything from virtualization to storage and networking by means of software, we can say that we realize a "Software Defined Data Center": SDDC) by a full range of enterpises, from the smallest up to the medium ones (obviously by scaling the hardware specifications accordingly).
+By "_complete enterprise infrastructure_" we mean a solution based on standard hardware (64 bit Intel/AMD compatible machines, absolutely off-the-shelf) which _using free software provides all functionalities_ needed (so, by realizing everything from virtualization to storage and networking by means of software, we can say that we realize a "Software Defined Data Center": SDDC) by a full range of enterprises, from the smallest up to the medium/large ones (obviously by scaling the hardware specifications accordingly).
  
 
 ###  The HVP project
@@ -106,40 +106,40 @@ Those configurations do not only affect the installation part, but also create f
   
 In fact, we aim at use cases not only inside full-blown settings; in other terms, we do not assume to be deployed inside a fully formed enterpise framework with already present basic facilities, consequently we added to our solution all the functionalities which allow a "from scratch" approach for the enterprise network environment: what we listed above in our sample setups is all that is needed, nothing more is "hidden/assumed" (except for an Internet connection).
 
-At the end of the Kickstart-automated installations of teh support PC/VD and of the servers, we use gDeploy and Ansible to automatically orchestrate all the further configurations which will set up the storage, virtualization, networking and all the specific virtual machines offering other services to the enterprise network.
+At the end of the Kickstart-automated installations of the support PC/VD and of the servers, we use gDeploy and Ansible to automatically orchestrate all the further configurations which will set up the storage, virtualization, networking and all the specific virtual machines offering other services to the enterprise network.
 
 
 ##  The actual procedure
   
 
-Passiamo ad illustrare il procedimento concreto.  
+We now detail the actual procedure.  
   
 
-####  Il PC/VD di supporto
+####  The support PC/VD
   
-Si parte dal collegare il PC/VD di supporto:  
+Start from connecting the suppport PC/VD:  
   
-* su di una porta di rete (tipicamente quella "principale", incorporata nella macchina, ma ne dovrà essere comunque individuato il nome Linux, ad esempio tramite un avvio preventivo da un DVD Live o dal DVD di installazione medesimo in modalità rescue; supporremo nel seguito che tale nome sia eno1) il PC/VD deve essere collegato ad Internet (ad esempio passando da un router / access point)
-* sulle altre porte di rete il PC/VD deve essere collegato agli switch presenti
+* on one network port (usually the "main", embedded one) the PC/VD must be connected to the Internet (eg by means of a router / access point)
+* on the other network ports the PC/VD must be connected to the available network switches
 
-##### Le reti
+##### The networks
   
-In particolare sugli switch dovranno essere realizzate **da una a quattro reti separate** (ovverosia isolate tra di loro e da tutto il resto, Internet incluso, o perché realizzate su più&nbsp;switch&nbsp;semplici distinti e non collegati o perché realizzate tramite VLAN su switch più sofisticati):  
+The network switches must create **from one to four distinct networks** (ie isolated from each other and from the rest of the network environment, Internet included, either by being realized on simple unconnected distinct switches or by being realized as different VLANs on more capable switches):
 
-1. Se il PC/VD avrà una sola porta di rete aggiuntiva (oltre a quella connessa ad Internet), questa dovrà essere connessa ad una rete separata: quella di **gestione** (ospiterà le comunicazioni tra i server fisici, nel loro ruolo di nodi oVirt, e l'Engine oVirt).
-2. Se il PC/VD avrà anche un'altra porta di rete aggiuntiva (come era durante la nostra presentazione), questa dovrà essere connessa ad una ulteriore rete separata: quella di **Gluster** (ospiterà le comunicazioni di sincronizzazione tra i server fisici nel loro ruolo di nodi Gluster).
-3. Se il PC/VD avrà anche un'ulteriore porta di rete aggiuntiva, questa dovrà essere connessa ad una ulteriore rete separata: quella di **produzione** (per intenderci: quella cui sono connesse le postazioni client degli utenti ed eventuali altri server/apparati presenti, quindi quella su cui si "affacceranno" le virtual machine realizzate ed i servizi di file sharing offerti tramite Samba/Gluster-NFS dai server fisici).
-4. Se infine il PC/VD avrà anche un'ultima porta di rete aggiuntiva, questa dovrà essere connessa ad una ultima rete separata: quella di **isolamento**&nbsp;(quella tramite la quale la rete di produzione può essere isolata da Internet e/o da altre reti).
+1. If the PC/VD has only one further network port (beyond the one connected to the Internet), this must be connected to a separate network: the **management** one (this network will allow the communication between the servers, as oVirt nodes, and the oVirt Engine).
+2. If the PC/VD has one additional further network port (like on our aforementioned example setups), this must be connected to a further separate network: the **Gluster** network (this network will allow the synchronization communications between the servers, as Gluster nodes).
+3. If the PC/VD has another one additional further network port, this must be connected to another further separate network: the **production** network (ie the network to which also users' client PCs and any other pre-existing server/appliance are connected and consequently also the network to which our future virtual machines and Samba/Gluster-NFS file sharing services will "accede").
+4. Finally, if the PC/VD has one additional further network port, this must be connected to a further separate network: the **isolation** network (this network allows to separate the production network from the Internet and/or from other networks).
   
-Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o inserite in appositi file di configurazione).  
+During the subsequent installation phase, the Kickstart will recognize network ports actually connected and will assign to the logical networks following the order listed above (further control on those networks, from IP addressing to MTU, can be exercised by means of kernel commandline parameters or by custom configuration files).
   
-Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (abbiamo fatto notare che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nella nostra presentazione avevamo due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
+Obviously, if less than 4 separate networks are available, then the communications related to the missing separate networks will conflate on the actually present ones (we must stress the fact that it is mostly "difficult" the coexistence of oVirt management and Gluster synchronization traffic on the same network, and this is why we always have at least two separate networks in our setups: in this case the second network gets automatically relegated to the exclusive use of Gluster synchronization while the other network takes hold of all other functions).
 
-##### La resistenza ai guasti
+##### Fault tolerance
 
 Poche parole relative alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (3 e non 2 per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF:&nbsp;"single point of failure") sufficiente ad inficiare la resistenza ai guasti; nei nostri setup dimostrativi per semplicità non lo abbiamo sempre dimostrato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata sempre almeno doppie.  
 
-##### L'installazione
+##### The installation
 
 Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
   
@@ -153,7 +153,7 @@ Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a
 * Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutti i server)
   
   
-####  I server
+####  The servers
 
   
 Il passo successivo (da ripetere per ognuna delle macchine server che costituiranno l'infrastruttura permanente) è quello di collegare i server alle reti isolate.  
@@ -172,7 +172,7 @@ Dietro le quinte il PC/VD di supporto istruirà i server ad installarsi tramite 
 Sottolineiamo il fatto che il Kickstart dei server contiene una logica (sempre controllabile tramite opzioni custom da commandline del kernel o da frammento di configurazione) per scegliere il disco sul quale installare il sistema operativo; per assunto esso sarà il primo tra quelli con la minor dimensione disponibile: sarà poi compito di chi installa fare in modo che tale disco sia effettivamente avviabile, agendo sul firmware (BIOS o UEFI) della macchina server.  
   
 
-####  La configurazione finale
+####  The final configuration
 
   
 Terminata l'installazione delle tre macchine server, si potrà procedere con la configurazione automatizzata delle funzionalità vere e proprie.  
@@ -208,7 +208,7 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
   
   
 
-##  Conclusione
+##  Conclusions
 
   
 A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
