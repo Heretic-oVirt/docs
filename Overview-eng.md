@@ -67,7 +67,7 @@ Our laboratory environment contains three different setups, two physical and one
 * 1 virtuale LAN in NAT mode and 4 isolated virtual LAN segments
   
 The generic PC/VD is meant only as a reference during setup but it is assumed to be decommissioned after installation has been completed.
-We also validated a mixed setup with a virtual generic PC/VD, hosted on a laptopo with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
+We also validated a mixed setup with a virtual generic PC/VD, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
 
 
 ##  The automation technologies
@@ -100,13 +100,13 @@ It consists of a specialized Gluster/RHGS infrastructure setup automation system
 #### How we combine the automation technologies
 
 
-Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi identificate dalle direttive&nbsp;%pre e %post) degli script in&nbsp;Bash&nbsp;che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri&nbsp;custom&nbsp;(per modificare i valori di default da noi scelti) passati tramite la&nbsp;commandline&nbsp;del&nbsp;kernel&nbsp;all'avvio (o tramite frammenti di configurazione reperiti assieme al file di Kickstart), effettuano un&nbsp;autoriconoscimento&nbsp;e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti&nbsp;storage&nbsp;(come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine&nbsp;oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best&nbsp;practices" pubblicate) e così via.  
-  
-Tali configurazioni automatiche non si fermano a quanto necessario in fase di installazione, ma creano e fanno trovare pronti anche i file di configurazione necessari ad attivare ex-novo funzionalità ulteriori non usualmente presenti nelle installazioni interattive, in particolare un sistema autosufficiente di risoluzione dei nomi di rete (DNS) sia locali (quelli dei sistemi che andiamo ad installare/creare) sia Internet.  
-  
-Il nostro caso d'uso tipico è infatti una realtà non necessariamente strutturata, ovverosia non supponiamo di trovarci in un'azienda che inserisca la nostra soluzione in un'architettura già completa quantomeno dei servizi base, quindi abbiamo aggiunto nella nostra soluzione funzionalità che permettono di partire "da zero" anche per quanto riguarda l'ambiente di rete aziendale: quello che è elencato sopra nei setup di esempio è quello che serve, nient'altro è "nascosto/ipotizzato" (a parte un collegamento Internet).  
+In our specific implementation, we added into the Kickstarts (using those steps identified by the %pre and %post directives) some Bash scripts which, by means of standard Linux commands available inside the minimal installation environment and optionally recognizing some custom parameters (to change our default settings) passed by the boot kernel commandline (or by configuration fragments retrieved together with the Kickstart file), perform an automated discovery and configuration of the whole hardware setup: network connections (find which port is connected to which network), storage resources assignments (how to use each one of the available disks), single machine role (define the identity of the node inside the oVirt machines cluster), software parameters settings (conforming, whenever possible, to known "best practices") and so on.
 
-Al termine delle installazioni automatizzate tramite Kickstart di PC/VD di supporto e dei server, gDeploy ed Ansible vengono usati per orchestrare automaticamente le configurazioni successive che creeranno le funzionalità di storage, virtualizzazione, networking e le virtual machine specifiche che forniranno alla rete aziendale i rimanenti servizi.
+Those configurations do not only affect the installation part, but also create from scratch full configuration files for further functionalities which are usually not made available by interactive installations, eg a self-sufficient network resolution system (DNS) both for local system names (those of the machines we are going to configure/create) and for Internet names.
+  
+In fact, we aim at use cases not only inside full-blown settings; in other terms, we do not assume to be deployed inside a fully formed enterpise framework with already present basic facilities, consequently we added to our solution all the functionalities which allow a "from scratch" approach for the enterprise network environment: what we listed above in our sample setups is all that is needed, nothing more is "hidden/assumed" (except for an Internet connection).
+
+At the end of the Kickstart-automated installations of teh support PC/VD and of the servers, we use gDeploy and Ansible to automatically orchestrate all the further configurations which will set up the storage, virtualization, networking and all the specific virtual machines offering other services to the enterprise network.
 
 
 ##  The actual procedure
