@@ -4,7 +4,7 @@
 
 ###  Cosa riguarda 
 
-Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10]&nbsp;con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa) ed&nbsp;iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione) resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite [OVN][18]).  
+Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10]&nbsp;con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite [OVN][18]).  
   
 Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire (in questo senso, essendo tutto, dalla virtualizzazione, allo storage, al networking realizzato in software si può dire alla fine di avere un "Software Defined Data center": SDDC) a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
   
@@ -38,7 +38,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
     * un HPE Pavillion di circa 5 anni con 6 GiB di RAM e processore Core2 Duo
     * 3 porte di rete (1 integrata e 2 su schede Gigabit aggiuntive)
 * 2 switch di rete Gigabit (uno dei quali compatibile con Jumbo-Frame)
-* il necessario gomitolo di cavi
+* 21 cavi di rete (CAT-5e UTP) di opportune lunghezze
   
 #### Setup fisico 2
 
@@ -51,7 +51,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
     * un Dell di circa 5 anni con 2 GiB di RAM e processore Core2 Duo
     * 5 porte di rete (1 integrata, 1 su scheda Gigabit aggiuntiva e 3 con adattatori Ethernet-USB)
 * 1 switch di rete Gigabit (compatibile con Jumbo-Frame, VLAN e LACP)
-* il necessario gomitolo di cavi
+* 26 cavi di rete (CAT-5e UTP) di opportune lunghezze
   
 #### Setup virtuale
 
@@ -120,7 +120,7 @@ Passiamo ad illustrare il procedimento concreto.
   
 Si parte dal collegare il PC/VD di supporto:  
   
-* su di una porta di rete (tipicamente quella "principale", incorporata nella macchina, ma ne dovrà essere comunque individuato il nome Linux, ad esempio tramite un avvio preventivo da un DVD Live o dal DVD di installazione medesimo in modalità rescue; supporremo nel seguito che tale nome sia eno1) il PC/VD deve essere collegato ad Internet (ad esempio passando da un router / access point)
+* su di una porta di rete (tipicamente quella "principale", incorporata nella macchina) il PC/VD deve essere collegato ad Internet (ad esempio passando da un router / access point)
 * sulle altre porte di rete il PC/VD deve essere collegato agli switch presenti
 
 ##### Le reti
