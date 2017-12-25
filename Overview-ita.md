@@ -134,7 +134,7 @@ In particolare sugli switch dovranno essere realizzate **da una a quattro reti s
   
 Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete effettivamente collegate e le assegnerà alle varie reti logiche nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o inserite in appositi file di configurazione).  
   
-Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (abbiamo fatto notare che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nei nostri setup abbiamo due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
+Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (dobbiamo sottolineare il fatto che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nei nostri setup abbiamo sempre almeno due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
 
 ##### La resistenza ai guasti
 
