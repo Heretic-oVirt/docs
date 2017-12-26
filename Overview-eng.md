@@ -184,16 +184,16 @@ The automated configuration (partly under development) that follows the installa
 2. the oVirt Self Hosted Engine answers file gets generated and the installation performed on "Node 0" (a corresponding interactive step is available through the Node Cockpit web interface)
 3. the Gluster storage domains get configured in oVirt (importing the Datacenter main storage domain, an action which causes the automatic addition of the Self Hosted Engine storage domain and subsequently of the Engine vm within)
 4. further nodes beyond "Node 0" gets added to the oVirt cluster 
-5. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
-6. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
-7. configurano gli storage domain NFS in oVirt (essendo esportati dagli IP virtuali gestiti da CTDB, necessitano del passo precedente come prerequisito)
-8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
-    1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;e ricompilato per attivare le funzioni di DC usando le librerie interne Heimdal ecc.)
-    2. un printer server membro del dominio Active Directory di cui sopra
-    3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_&nbsp;;-) , SQLServer!)
-    4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
-    5. altre vm opzionali (server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
-9. riconfigurano Samba come membro del dominio Active Directory di cui sopra
+5. OVN and further (beyond management) networks get configured both on the Engine and on nodes (a couple of further internal isolated OVN networks, for security/test purposes, will be added)
+6. CTDB, Samba and Gluster-NFS services gets configured and started (Gluster-block will be added, while Gluster-NFS will be replaced by NFS-Ganesha), all of those relying on Gluster volumes (here lies the first _heresy_: we use the hyperconverged storage also for file sharing, not only for virtualization)
+7. NFS storage domains get configured in oVirt (currently only the ISO domain)
+8. additional virtual machines get created on the oVirt infrastructure (to be installed from-scratch by means of dedicated Kickstarts; this automation is still being developed):
+    1. an Active Directory domain controller with automated from-scratch creation of a new domain (another _heresy_: we use CentOS7 with a modified Fedora Samba package rebuilt to activate DC functions using internal Heimdal Kerberos libraries etc.)
+    2. a printer server member of the Active Directory domain above
+    3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird or, real _heresy_&nbsp;;-) , SQLServer!)
+    4. a CentOS7 virtual desktop member of the Active Directory domain above
+    5. other optional vms (an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all members of the Active Directory domain above)
+9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
 
 The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
 
