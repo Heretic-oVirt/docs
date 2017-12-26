@@ -76,7 +76,7 @@ We also validated a mixed setup with a virtual generic PC/VD, hosted on a laptop
 Our solution is based:  
 
 * for the initial part on the time-proven installation automation technology of CentOS/Fedora/RHEL: **[Kickstart][61]**
-* for the following part on new configuration management technologies: **[gDeploy][62]** e **[Ansible][63]**
+* for the following part on new configuration management technologies: **[gDeploy][62]** and **[Ansible][63]**
 
 
 ####  Kickstart
