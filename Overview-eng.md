@@ -37,7 +37,7 @@ Our laboratory environment contains three different setups, two physical and one
     * 1 x 4-port additional Gigabit network adapter
 * 1 generic PC made of:
     * an HPE Pavillion about 5 years old with 6 GiB RAM and a Core2 Duo processor
-    * 3 x network adapters (1 embedded e 2 on expansion Gigabit cards)
+    * 3 x network adapters (1 embedded and 2 on expansion Gigabit cards)
 * 2 x Gigabit network switches (one Jumbo-Frame capable)
 * 21 network cables (CAT-5e UTP) of proper lengths
   
@@ -178,9 +178,9 @@ We must stress the fact that the server Kickstart contains a custom logic (alway
 Once the three server machines have been installed, you can proceed with the automated configuration of the actual functions.
 At any "fixed point" reached by the automation it is always possible to inspect the status and even proceed from that point onwards in manual/interactive mode (for example at this point in case the "NGN" type has been chosen for the servers, you could access the [Cockpit][24] web interface of the "Node 0" from the support PC/VD and then continue interactively from there as per oVirt documentation): our aim is to automate but always maintain full compatibility and traceability of the steps, ie do not create a "closed" system.
 
-The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which performs (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
+The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which perform (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
 
-1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix)
+1. the gDeploy configuration file gets generated and used to create the shared storage layer based on Gluster (a corresponding interactive step is available through the Node Cockpit web interface) with an automated logic of disk choice in order to compose each one of the expected Gluster volumes (we support up to three disks on each server in order to create Gluster volumes dedicated to: oVirt Engine, other oVirt vms, ISO images, CTDB/NFS-Ganesha locking/clustering, CIFS/Windows file sharing and NFS/Unix file sharing; a further volume dedicated to Gluster-Block iSCSI/FCoE services will be added)
 2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
 3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
@@ -197,11 +197,11 @@ The automated configuration (partly under development) that follows the installa
 
 The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
 
-All the software used has been made available (if modified in the course of the project) in custom [yum repositories][25] with the corresponding source packages (all packages have been produced using mock and have beeen signed with the [project GPG key][26]).
+All the software used has been made available (if modified in the course of the project) in custom [yum repositories][25] together with the corresponding source packages (all packages have been produced using mock and have beeen signed with the [project GPG key][26]).
 
-We must stress tha fact that all the tests and the development performed so far have been concerned with a set of **exactly 3** **server machines**, and in this case one of those 3, to be installed as "Node 2" (ie that one cited in the setups above as "_the last server_"), will be configured as a pure "**arbiter**" (ie it does not handle/replicate data but only metadata for all files) for all Gluster volumes, thus allowing to use a less "performant" machine, disk/CPU-wise, without impacting global performances; we expect nonetheless to support the initial creation of infrastrucuture based on **4 and more server machines** and also to support the more delicate issue of expanding an existing 3-server-machines setup to 4 or more server machines.
+We must stress tha fact that all the tests and the development performed so far have been concerned with a set of **exactly 3** **server machines**, and in this case one of those 3, to be installed as "Node 2" (ie that one cited in the setups above as "_the last server_"), will be configured as a pure "**arbiter**" (ie it does not handle/replicate data but only metadata for all files) for all Gluster volumes, thus allowing to use a less "performant" machine, disk/CPU-wise, without impacting global performances; we expect nonetheless to support the initial creation of an infrastructure based on **4 and more server machines** and also to support the more delicate issue of expanding an existing 3-server-machines setup to 4 or more server machines.
 
-We must also stress that, as a further form of provocation/_heresy_, our project uses (alway created and published as noted above):  
+We must also stress that, as a further form of provocation/_heresy_, our project uses (always created and published as noted above):  
 
 * the **Gluster packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
 * the **Openvswitch and OVN packages rebuilt from Fedora sources** of more recent versions
