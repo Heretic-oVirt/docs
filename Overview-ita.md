@@ -189,7 +189,7 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 6. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
 7. configurano gli storage domain NFS in oVirt (attualmente solo quello delle immagini ISO)
 8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
-    1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;e ricompilato per attivare le funzioni di DC usando le librerie interne Heimdal ecc.)
+    1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;modificato e ricompilato per attivare le funzioni di DC usando le librerie Kerberos interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
     3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_&nbsp;;-) , SQLServer!)
     4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
