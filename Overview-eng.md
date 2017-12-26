@@ -211,17 +211,17 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
 ##  Conclusions
 
   
-A conclusione ricordo che abbiamo in progetto di porre mano a breve&nbsp;ad alcuni aspetti, in ordine di importanza:  
+Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
-1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart (la sezione documentazione del sito è al momento colpevolmente vuota);
-2. **estrarre la parte Ansible/gDeploy**&nbsp;dal file di Kickstart del PC/VD di supporto e darle vita propria nell'[apposito repository Github][64];
-3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** (l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
+1. **Document what we did**, not only in form of comments inside scripts/Kickstarts (the docuemntation section of the web site is currently empty);
+2. **Extract the Ansible/gDeploy files** from the Kickstart file of the support PC/VD and place it in the [appropriate Github repository][64];
+3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but from the **RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
-Concludo indicando che tra gli ulteriori sviluppi futuri c'è l'aggiunta di soluzioni integrate di:  
+Among further future developments there are also integrated solutions for:  
 
-* **backup** (usando il software libero [Bareos][27], di nuovo da ricompilare in una versione mantenuta aggiornata);
-* **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store"&nbsp;[in corso di sviluppo in oVirt][28]);
-* **spegnimento totale non presidiato** a seguito di eventi esterni (si pensi al caso di piccole realtà con UPS singoli, o anche centralizzati, ma senza la garanzia di alimentazione ininterrotta tramite generatori ecc.).
+* **backup** (using the [Bareos][27] free software, again to be recompiled from long-term support versions);
+* **monitoring** (centralized gathering of logs and/or integration with the "Metrics Store" solution [being developed for oVirt][28]);
+* **automated complete infrastructure shutdown** unattended and driven by external events (just think of small setups with a single UPS or even an enterpise UPS but without the guarantee of uninterrupted power supply from emergency generators).
   
   
 
