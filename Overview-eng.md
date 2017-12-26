@@ -66,14 +66,14 @@ Our laboratory environment contains three different setups, two physical and one
     * 5 x virtual network adapters
 * 1 virtuale LAN in NAT mode and 4 isolated virtual LAN segments
   
-The generic PC/VD is meant only as a reference during setup but it is assumed to be decommissioned after installation has been completed.
+The generic PC/VD is meant only as a support machine during setup but it is expected to be decommissioned after setup has been completed.
 We also validated a mixed setup with a virtual generic PC/VD, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
 
 
 ##  The automation technologies
 
   
-Our solution is based on:  
+Our solution is based:  
 
 * for the initial part on the time-proven installation automation technology of CentOS/Fedora/RHEL: **[Kickstart][61]**
 * for the following part on new configuration management technologies: **[gDeploy][62]** e **[Ansible][63]**
@@ -162,7 +162,7 @@ The list of supported separate networks is the same as listed above in the case 
 
 Any server remote management hardware (called iLO for HPE servers like ours or iDRAC for Dell servers, but other vendors have similar, sometimes optional, solutions under the name of BMC or IPMI) should be connected to the separate management network and the support PC/VD can be used to access the remote console offered by these out-of-band management solutions.
 
-The actual installation of the server machines is expected to happen by means of network boot (PXE), which means that on the server machines the network boot option must be activated by firmware (BIOS or UEFI) and there must be at least one of the network ports selected as a boot device (an option which is again dependent on the firmware, but the first of the embedded network cards is usually a safe choice) and connected to the management network mentioned above (that is: connected to the appropriate dedicated switch or VLAN).
+The actual installation of the server machines is expected to happen by means of network boot (PXE), which means that on the server machines the network boot option must be activated by firmware (BIOS or UEFI) and there must be at least one of the network ports selected as a boot device (an option which is again dependent on the firmware, but the first of the embedded network cards is usually a safe choice to make) and connected to the management network mentioned above (that is: connected to the appropriate dedicated switch or VLAN).
 
 Once the server machine has been booted from the network, it will present a boot menu with precompiled entries (it will have been created by the installation of the support PC/VD, also propagating any changes to the defaults made through kernel commandline options, changes that should not be repeated) and the only interactive choice to be made will be to select the type (a complete server based on CentOS, referred to as "Host", or a minimal server based on oVirt-NextGenerationNode, referred to as "NGN") and identity (identified as "Node 0", "Node 1" or "Node 2") of the machine you are installing, then press Enter and wait for the prompt to signal that installation has been completed.
 
@@ -181,12 +181,12 @@ At any "fixed point" reached by the automation it is always possible to inspect 
 The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which perform (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
 
 1. the gDeploy configuration file gets generated and used to create the shared storage layer based on Gluster (a corresponding interactive step is available through the Node Cockpit web interface) with an automated logic of disk choice in order to compose each one of the expected Gluster volumes (we support up to three disks on each server in order to create Gluster volumes dedicated to: oVirt Engine, other oVirt vms, ISO images, CTDB/NFS-Ganesha locking/clustering, CIFS/Windows file sharing and NFS/Unix file sharing; a further volume dedicated to Gluster-Block iSCSI/FCoE services will be added)
-2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
-3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
-4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
-5. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
-6. configurano gli storage domain NFS in oVirt (essendo esportati dagli IP virtuali gestiti da CTDB, necessitano del passo precedente come prerequisito)
-7. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
+2. the oVirt Self Hosted Engine answers file gets generated and the installation performed on "Node 0" (a corresponding interactive step is available through the Node Cockpit web interface)
+3. the Gluster storage domains get configured in oVirt (importing the Datacenter main storage domain, an action which causes the automatic addition of the Self Hosted Engine storage domain and subsequently of the Engine vm within)
+4. further nodes beyond "Node 0" gets added to the oVirt cluster 
+5. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
+6. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
+7. configurano gli storage domain NFS in oVirt (essendo esportati dagli IP virtuali gestiti da CTDB, necessitano del passo precedente come prerequisito)
 8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
     1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora&nbsp;e ricompilato per attivare le funzioni di DC usando le librerie interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
