@@ -1,8 +1,8 @@
-# Heretic oVirt Project - Panoramica (Overview)
+# Heretic oVirt Project - Panoramica
 
 ## Introduzione
 
-###  Cosa riguarda 
+###  Di cosa si tratta 
 
 Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10]&nbsp;con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con funzionalità di rete evolute integrate (tramite [OVN][18]).  
   
