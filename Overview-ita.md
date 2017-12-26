@@ -185,7 +185,7 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 2. generano il file di configurazione ed effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
 3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
-5. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
+5. configurano OVN ed altre reti (oltre a quella di management) sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate OVN potenzialmente utili per motivi di sicurezza e/o di test)
 6. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
 7. configurano gli storage domain NFS in oVirt (attualmente solo quello delle immagini ISO)
 8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
