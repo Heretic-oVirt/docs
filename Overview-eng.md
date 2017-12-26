@@ -175,10 +175,10 @@ We must stress the fact that the server Kickstart contains a custom logic (alway
 ####  The final configuration
 
   
-Terminata l'installazione delle tre macchine server, si potrà procedere con la configurazione automatizzata delle funzionalità vere e proprie.  
-In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile ispezionare lo stato ed eventualmente addirittura procedere da quel punto in poi in maniera manuale/interattiva (ad esempio a questo punto in caso si sia scelto il tipo "NGN" per i server, si potrebbe accedere via web dal PC/VD di supporto all'interfaccia [Cockpit][24] del "Node 0" e proseguire interattivamente come da relativa documentazione di oVirt): il nostro scopo è di automatizzare sì, ma mantenendo la piena compatibilità e tracciabilità dei passi, ovvero senza realizzare un sistema "chiuso".  
-  
-La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC/VD di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
+Once the three server machines have been installed, you can proceed with the automated configuration of the actual functions.
+At any "fixed point" reached by the automation it is always possible to inspect the status and even proceed from that point onwards in manual/interactive mode (for example at this point in case the "NGN" type has been chosen for the servers, you could access the [Cockpit][24] web interface of the "Node 0" from the support PC/VD and then continue interactively from there as per oVirt documentation): our aim is to automate but always maintain full compatibility and traceability of the steps, ie without creating a "closed" system.
+
+The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which performs (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
 
 1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix)
 2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
@@ -213,15 +213,15 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
   
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
-1. **Document what we did**, not only in form of comments inside scripts/Kickstarts (the docuemntation section of the web site is currently empty);
-2. **Extract the Ansible/gDeploy files** from the Kickstart file of the support PC/VD and place it in the [appropriate Github repository][64];
+1. **Document what we did**, not only in form of comments inside scripts/Kickstarts (the documentation section of the web site is reprehensibly empty);
+2. **Extract the Ansible/gDeploy files** from the Kickstart file of the support PC/VD and place them in the [appropriate Github repository][64];
 3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but from the **RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
 Among further future developments there are also integrated solutions for:  
 
 * **backup** (using the [Bareos][27] free software, again to be recompiled from long-term support versions);
 * **monitoring** (centralized gathering of logs and/or integration with the "Metrics Store" solution [being developed for oVirt][28]);
-* **automated complete infrastructure shutdown** unattended and driven by external events (just think of small setups with a single UPS or even an enterpise UPS but without the guarantee of uninterrupted power supply from emergency generators).
+* **automated complete infrastructure shutdown** unattended and driven by external events (just think of small setups with a single UPS or even an enterprise UPS but without the guarantee of uninterrupted power supply from emergency generators).
   
   
 
