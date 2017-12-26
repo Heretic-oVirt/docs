@@ -176,7 +176,7 @@ We must stress the fact that the server Kickstart contains a custom logic (alway
 
   
 Once the three server machines have been installed, you can proceed with the automated configuration of the actual functions.
-At any "fixed point" reached by the automation it is always possible to inspect the status and even proceed from that point onwards in manual/interactive mode (for example at this point in case the "NGN" type has been chosen for the servers, you could access the [Cockpit][24] web interface of the "Node 0" from the support PC/VD and then continue interactively from there as per oVirt documentation): our aim is to automate but always maintain full compatibility and traceability of the steps, ie without creating a "closed" system.
+At any "fixed point" reached by the automation it is always possible to inspect the status and even proceed from that point onwards in manual/interactive mode (for example at this point in case the "NGN" type has been chosen for the servers, you could access the [Cockpit][24] web interface of the "Node 0" from the support PC/VD and then continue interactively from there as per oVirt documentation): our aim is to automate but always maintain full compatibility and traceability of the steps, ie do not create a "closed" system.
 
 The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which performs (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
 
@@ -195,16 +195,16 @@ The automated configuration (partly under development) that follows the installa
     5. altre vm opzionali (server gestionali che si appoggino al DB server di cui sopra, server di messaggistica/comunicazione, server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano Samba come membro del dominio Active Directory di cui sopra
 
-L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con&nbsp;ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml&nbsp;), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
-  
-Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
-  
-Sottolineiamo il fatto che i test compiuti finora hanno riguardato insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale (tramite modifica alle logiche di creazione del file gDeploy) di infrastrutture basate su **4 e più macchine server** e pure il supporto al più spinoso problema di espandere a 4 e più macchine server una infrastruttura inizialmente creata con 3 macchine server.  
-  
-Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
+The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
 
-* i **pacchetti Gluster** non community, bensì **ricompilati dai sorgenti di RHGS** (il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
-* i **pacchetti Openvswitch ed OVN ricompilati da versioni Fedora** più recenti
+All the software used has been made available (if modified in the course of the project) in custom [yum repositories][25] with the corresponding source packages (all packages have been produced using mock and have beeen signed with the [project GPG key][26]).
+
+We must stress tha fact that all the tests and the development performed so far have been concerned with a set of **exactly 3** **server machines**, and in this case one of those 3, to be installed as "Node 2" (ie that one cited in the setups above as "_the last server_"), will be configured as a pure "**arbiter**" (ie it does not handle/replicate data but only metadata for all files) for all Gluster volumes, thus allowing to use a less "performant" machine, disk/CPU-wise, without impacting global performances; we expect nonetheless to support the initial creation of infrastrucuture based on **4 and more server machines** and also to support the more delicate issue of expanding an existing 3-server-machines setup to 4 or more server machines.
+
+We must also stress that, as a further form of provocation/_heresy_, our project uses (alway created and published as noted above):  
+
+* the **Gluster packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
+* the **Openvswitch and OVN packages rebuilt from Fedora sources** of more recent versions
   
   
 
