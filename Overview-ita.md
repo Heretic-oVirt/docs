@@ -65,7 +65,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
     * 5 porte di rete
 * 1 LAN virtuale in NAT e 4 segmenti LAN virtuali isolati
   
-Lo scopo del PC/VD generico è quello di fare da riferimento solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
+Lo scopo del PC/VD generico è quello di fare da supporto solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
 È stato sperimentato anche un setup misto nel quale il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
   
 
@@ -181,8 +181,8 @@ In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile ispezi
   
 La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC/VD di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
 
-1. generano il file di configurazione gDeploy per la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix)
-2. effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
+1. generano il file di configurazione gDeploy ed effettuano la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix; un ulteriore volume dedicato a Gluster-Block per i servizi iSCSI/FCoE verrà aggiunto in seguito)
+2. generano il file di configurazione ed effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
 3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
 5. configurano OVN sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate potenzialmente utili per motivi di sicurezza e/o di test)
