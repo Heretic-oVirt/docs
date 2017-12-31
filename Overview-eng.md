@@ -204,7 +204,7 @@ We must stress tha fact that all the tests and the development performed so far 
 
 We must also stress that, as a further form of provocation/_heresy_, our project uses (always created and published as noted above):  
 
-* the **Gluster packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
+* the **Gluster/Samba/Ganesha packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
 * the **Openvswitch and OVN packages rebuilt from Fedora sources** of more recent versions
   
   
