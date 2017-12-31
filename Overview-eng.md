@@ -213,7 +213,7 @@ We must also stress that, as a further form of provocation/_heresy_, our project
   
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
-1. **Document what we did**, not only in form of comments inside scripts/Kickstartsbut also by adding a quickstart guide and a detailed technical guide;
+1. **Document what we did**, not only in form of comments inside scripts/Kickstarts, but also by adding a quickstart guide and a detailed technical guide;
 2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful and adhering to standards for playbooks/modules;
 3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
