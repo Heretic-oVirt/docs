@@ -206,7 +206,7 @@ Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno rig
   
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
-* i **pacchetti Gluster** non community, bensì **ricompilati dai sorgenti di RHGS** (il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
+* i **pacchetti Gluster/Samba/Ganesha** non community, bensì **ricompilati dai sorgenti di RHGS** (il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
 * i **pacchetti Openvswitch ed OVN ricompilati da versioni Fedora** più recenti
   
   
