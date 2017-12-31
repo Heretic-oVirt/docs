@@ -6,7 +6,9 @@
 
 Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
   
-Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire (in questo senso, essendo tutto, dalla virtualizzazione, allo storage, al networking realizzato in software si può dire alla fine di avere un "Software Defined Data center": SDDC) a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
+Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
+
+Sicrome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": SDDC.
   
 ###  Il progetto HVP
 
