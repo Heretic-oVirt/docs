@@ -4,7 +4,7 @@
 
 ###  What is this about 
 
-This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10] with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated network functions (by means of [OVN][18]).
+This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10] with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated network (by means of [OVN][18]) and file sharing (by means of [Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]) functions.
 
 By "_complete enterprise infrastructure_" we mean a solution based on standard hardware (64 bit Intel/AMD compatible machines, absolutely off-the-shelf) which _using free software provides all functionalities_ needed (so, by realizing everything from virtualization to storage and networking by means of software, we can say that we realize a "Software Defined Data Center": SDDC) by a full range of enterprises, from the smallest up to the medium/large ones (obviously by scaling the hardware specifications accordingly).
  
@@ -247,3 +247,4 @@ Among further future developments there are also integrated solutions for:
 [62]: https://github.com/gluster/gdeploy
 [63]: https://www.ansible.com/
 [64]: https://github.com/Heretic-oVirt/ansible
+[65]: https://github.com/gluster/gluster-block
