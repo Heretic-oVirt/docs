@@ -4,7 +4,7 @@
 
 ###  What is this about 
 
-This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10]&nbsp;with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated network functions (by means of [OVN][18]).
+This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10] with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated network functions (by means of [OVN][18]).
 
 By "_complete enterprise infrastructure_" we mean a solution based on standard hardware (64 bit Intel/AMD compatible machines, absolutely off-the-shelf) which _using free software provides all functionalities_ needed (so, by realizing everything from virtualization to storage and networking by means of software, we can say that we realize a "Software Defined Data Center": SDDC) by a full range of enterprises, from the smallest up to the medium/large ones (obviously by scaling the hardware specifications accordingly).
  
@@ -137,7 +137,7 @@ Obviously, if less than 4 separate networks are available, then the communicatio
 
 ##### Fault tolerance
 
-A few words on fault tolerance: to have a fault-tolerant solution (and we always mean tolerant to a single fault at a time) all base components must be redundant; we have at least 3 servers (3 and not 2 to always have a qualified majority, ie a "quorum") in our infrastructure, but obviously the use of single switches (eg one single switch for each separated network or a single VLAN-capable switch for all separated networks) would represent a single weak point (SPOF:&nbsp;"single point of failure") which would be enough to invalidate the fault-tolerance of the whole infrastructure; our example setups do not include that for simplicity, but all switches should always be double and stacked (2 stacked switches for each separated network or 2 stacked VLAN-capable switches for all separated networks) and all server network ports should always be connected to separated networks at least in pairs.  
+A few words on fault tolerance: to have a fault-tolerant solution (and we always mean tolerant to a single fault at a time) all base components must be redundant; we have at least 3 servers (3 and not 2 to always have a qualified majority, ie a "quorum") in our infrastructure, but obviously the use of single switches (eg one single switch for each separated network or a single VLAN-capable switch for all separated networks) would represent a single weak point (SPOF: "single point of failure") which would be enough to invalidate the fault-tolerance of the whole infrastructure; our example setups do not include that for simplicity, but all switches should always be double and stacked (2 stacked switches for each separated network or 2 stacked VLAN-capable switches for all separated networks) and all server network ports should always be connected to separated networks at least in pairs.  
 
 ##### The PC/VD installation
 
@@ -190,7 +190,7 @@ The automated configuration (partly under development) that follows the installa
 8. additional virtual machines get created on the oVirt infrastructure (to be installed from-scratch by means of dedicated Kickstarts; this automation is still being developed):
     1. an Active Directory domain controller with automated from-scratch creation of a new domain (another _heresy_: we use CentOS7 with a modified Fedora Samba package rebuilt to activate DC functions using internal Heimdal Kerberos libraries etc.)
     2. a printer server member of the Active Directory domain above
-    3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird or, real _heresy_&nbsp;;-) , SQLServer!)
+    3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird or, real _heresy_ ;-) , SQLServer!)
     4. a CentOS7 virtual desktop member of the Active Directory domain above
     5. other optional vms (an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all members of the Active Directory domain above)
 9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
@@ -213,9 +213,9 @@ We must also stress that, as a further form of provocation/_heresy_, our project
   
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
-1. **Document what we did**, not only in form of comments inside scripts/Kickstarts (the documentation section of the web site is reprehensibly empty);
-2. **Extract the Ansible/gDeploy files** from the Kickstart file of the support PC/VD and place them in the [appropriate Github repository][64];
-3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but from the **RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
+1. **Document what we did**, not only in form of comments inside scripts/Kickstartsbut also by adding a quickstart guide and a detailed technical guide;
+2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful and adhering to standards for playbooks/modules;
+3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
 Among further future developments there are also integrated solutions for:  
 
@@ -225,15 +225,6 @@ Among further future developments there are also integrated solutions for:
   
   
 
-[1]: http://1.bp.blogspot.com/-ExvH-X8_0pE/VjD27i2QALI/AAAAAAAAOdo/lQj-MO1ilhc/s1600-r/oVirt%2Bitalia.png
-[2]: http://www.ovirt-italia.it/
-[3]: http://www.ovirt-italia.it/2015/10/che-cose-ovirt.html
-[4]: http://www.ovirt-italia.it/2016/11/vmware-e-ovirt-confronto.html
-[5]: http://www.ovirt-italia.it/p/ovirt-live.html
-[6]: https://resources.blogblog.com/img/icon18_wrench_allbkg.png
-[7]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=PageList&amp;widgetId=PageList1&amp;action=editWidget§ionId=crosscol-overflow "Modifica"
-[8]: https://www.bglug.it/
-[9]: https://www.fablabbergamo.it/
 [10]: https://www.ovirt.org/
 [11]: https://www.redhat.com/en/technologies/virtualization
 [12]: https://www.centos.org/
@@ -246,44 +237,11 @@ Among further future developments there are also integrated solutions for:
 [19]: https://ctdb.samba.org/
 [20]: https://www.samba.org/
 [21]: https://github.com/nfs-ganesha/nfs-ganesha/wiki
-[22]: https://1.bp.blogspot.com/-zAM2Wlh6RYI/WaSPzHsUdVI/AAAAAAAAABE/l0hDafn2tRMx8OYeObVeGfY-m-rcFWFqgCLcBGAs/s320/HVP-demo.jpg
-[23]: https://2.bp.blogspot.com/-20DaVbl-5AI/Waih2WfE-yI/AAAAAAAAABY/QPiPqD3-PMwmWban_oM3pn-GOqjv4rLnQCLcBGAs/s320/HVP-PXE-menu.JPG
 [24]: http://cockpit-project.org/
 [25]: https://dangerous.ovirt.life/hvp-repos/el7/
 [26]: https://dangerous.ovirt.life/hvp-repos/RPM-GPG-KEY-hvp
 [27]: https://www.bareos.org/
 [28]: http://www.ovirt.org/develop/release-management/features/metrics/metrics-store/
-[29]: https://plus.google.com/101771608258751283128 "author profile"
-[30]: http://www.ovirt-italia.it/2017/09/heretic-ovirt-project-il-recap.html "permanent link"
-[31]: https://resources.blogblog.com/img/icon18_edit_allbkg.gif
-[32]: https://www.blogger.com/post-edit.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;from=pencil "Modifica post"
-[33]: https://www.blogger.com/share-post.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;target=email "Invia tramite email"
-[34]: https://www.blogger.com/share-post.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;target=blog "Postalo sul blog"
-[35]: https://www.blogger.com/share-post.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;target=twitter "Condividi su Twitter"
-[36]: https://www.blogger.com/share-post.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;target=facebook "Condividi su Facebook"
-[37]: https://www.blogger.com/share-post.g?blogID=7835061380127359940&amp;postID=6085606257169617124&amp;target=pinterest "Condividi su Pinterest"
-[38]: http://www.ovirt-italia.it/2017/02/il-recap-del-workshop-di-milano.html "Post più vecchio"
-[39]: http://www.ovirt-italia.it/feeds/6085606257169617124/comments/default
-[40]: http://linuxdaymilano.org/2017/
-[41]: http://www.ovirt-italia.it/p/eventi.html
-[42]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=Text&amp;widgetId=Text1&amp;action=editWidget§ionId=sidebar-right-1 "Modifica"
-[43]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=Poll&amp;widgetId=Poll2&amp;action=editWidget§ionId=sidebar-right-1 "Modifica"
-[44]: javascript:void(0)
-[45]: http://www.ovirt-italia.it/2017/
-[46]: http://www.ovirt-italia.it/2017/09/
-[47]: http://www.ovirt-italia.it/2017/09/heretic-ovirt-project-il-recap.html
-[48]: http://www.ovirt-italia.it/2017/02/
-[49]: http://www.ovirt-italia.it/2017/01/
-[50]: http://www.ovirt-italia.it/2016/
-[51]: http://www.ovirt-italia.it/2016/11/
-[52]: http://www.ovirt-italia.it/2016/06/
-[53]: http://www.ovirt-italia.it/2015/
-[54]: http://www.ovirt-italia.it/2015/11/
-[55]: http://www.ovirt-italia.it/2015/10/
-[56]: http://www.ovirt-italia.it/2015/09/
-[57]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive1&amp;action=editWidget§ionId=sidebar-right-1 "Modifica"
-[58]: https://www.blogger.com
-[59]: //www.blogger.com/rearrange?blogID=7835061380127359940&amp;widgetType=Attribution&amp;widgetId=Attribution1&amp;action=editWidget§ionId=footer-3 "Modifica"
 [60]: https://www.ovirt.org/documentation/self-hosted/Self-Hosted_Engine_Guide/
 [61]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-kickstart-installations
 [62]: https://github.com/gluster/gdeploy
