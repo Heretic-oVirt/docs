@@ -68,7 +68,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
 * 1 LAN virtuale in NAT e 4 segmenti LAN virtuali isolati
   
 Lo scopo del PC/VD generico è quello di fare da supporto solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
-È stato sperimentato anche un setup misto nel quale il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
+È stato sperimentato anche un setup misto nel quale solo il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
   
 
 ##  Le tecnologie di automazione
@@ -216,7 +216,7 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
   
 A conclusione ricordiamo che abbiamo in progetto di porre mano a breve ad alcuni aspetti, in ordine di importanza:  
 
-1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart, ma aggiungendo anche un guida rapida all'utilizzo ed una guida tecnica più approfondita;
+1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart e della presente panoramica generale, ma aggiungendo anche un guida rapida all'utilizzo ed una guida tecnica più approfondita;
 2. **migliorare la parte Ansible/gDeploy** (ospitata nell'[apposito repository Github][64]) in modo da renderla generalmente usabile e più conforme agli standard per moduli/playbook;
 3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** (l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
   
