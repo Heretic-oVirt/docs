@@ -68,7 +68,7 @@ Our laboratory environment contains three different setups, two physical and one
 * 1 virtuale LAN in NAT mode and 4 isolated virtual LAN segments
   
 The generic PC/VD is meant only as a support machine during setup but it is expected to be decommissioned after setup has been completed.
-We also validated a mixed setup with a virtual generic PC/VD, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
+We also validated a mixed setup with only the generic PC/VD being virtual, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
 
 
 ##  The automation technologies
@@ -214,7 +214,7 @@ We must also stress that, as a further form of provocation/_heresy_, our project
   
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
-1. **Document what we did**, not only in form of comments inside scripts/Kickstarts, but also by adding a quickstart guide and a detailed technical guide;
+1. **Document what we did**, not only in form of comments inside scripts/Kickstarts and of this general overview, but also by adding a quickstart guide and a detailed technical guide;
 2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful and adhering to standards for playbooks/modules;
 3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
