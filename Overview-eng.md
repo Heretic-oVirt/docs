@@ -222,7 +222,7 @@ Among further future developments there are also integrated solutions for:
 
 * **backup** (using the [Bareos][27] free software, again to be recompiled from long-term support versions);
 * **monitoring** (centralized gathering of logs and/or integration with the "Metrics Store" solution [being developed for oVirt][28]);
-* **management/orchestration/provisioning** (based on the [Foreman][66] free software in a "[Red Hat Satellite][67]-like" configuration, both substituting our current custom temporary installer machine and living on inside an hosted vm);
+* **management/orchestration/provisioning** (based on the [Foreman][66] free software in a "[Red Hat Satellite][67]-like" configuration, both substituting our current PC/VD support machine and as a living-on hosted vm);
 * **automated complete infrastructure shutdown** unattended and driven by external events (just think of small setups with a single UPS or even an enterprise UPS but without the guarantee of uninterrupted power supply from emergency generators).
   
   
