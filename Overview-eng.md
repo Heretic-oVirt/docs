@@ -192,8 +192,8 @@ The automated configuration (partly under development) that follows the installa
     1. an Active Directory domain controller with automated from-scratch creation of a new domain (another _heresy_: we use CentOS7 with a modified Fedora Samba package rebuilt to activate DC functions using internal Heimdal Kerberos libraries etc.)
     2. a printer server member of the Active Directory domain above
     3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird or, real _heresy_ ;-) , SQLServer!)
-    4. a CentOS7 virtual desktop member of the Active Directory domain above
-    5. other optional vms (an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all members of the Active Directory domain above)
+    4. a CentOS7 remote desktop server ([X2Go][68] based) member of the Active Directory domain above
+    5. other optional vms (still being developed: an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all members of the Active Directory domain above)
 9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
 
 The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
@@ -222,6 +222,7 @@ Among further future developments there are also integrated solutions for:
 
 * **backup** (using the [Bareos][27] free software, again to be recompiled from long-term support versions);
 * **monitoring** (centralized gathering of logs and/or integration with the "Metrics Store" solution [being developed for oVirt][28]);
+* **management/orchestration/provisioning** (based on the [Foreman][66] free software in a "[Red Hat Satellite][67]-like" configuration, both substituting our current custom temporary installer machine and living on inside an hosted vm);
 * **automated complete infrastructure shutdown** unattended and driven by external events (just think of small setups with a single UPS or even an enterprise UPS but without the guarantee of uninterrupted power supply from emergency generators).
   
   
@@ -249,3 +250,6 @@ Among further future developments there are also integrated solutions for:
 [63]: https://www.ansible.com/
 [64]: https://github.com/Heretic-oVirt/ansible
 [65]: https://github.com/gluster/gluster-block
+[66]: https://www.theforeman.org/
+[67]: https://access.redhat.com/products/red-hat-satellite
+[68]: https://wiki.x2go.org/
