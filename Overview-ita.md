@@ -194,8 +194,8 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
     1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora modificato e ricompilato per attivare le funzioni di DC usando le librerie Kerberos interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
     3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_ ;-) , SQLServer!)
-    4. un desktop virtuale CentOS7, membro del dominio Active Directory di cui sopra
-    5. altre vm opzionali (un server gestionale che si appoggi al DB server di cui sopra, un server di messaggistica/comunicazione, un server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
+    4. un remote desktop server (basato su [X2Go][68]) CentOS7, membro del dominio Active Directory di cui sopra
+    5. altre vm opzionali (ancora in fase di realizzazione: un server gestionale che si appoggi al DB server di cui sopra, un server di messaggistica/comunicazione, un server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano il Samba file server sui nodi Gluster come membro del dominio Active Directory di cui sopra
 
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml ), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
@@ -224,6 +224,7 @@ Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate d
 
 * **backup** (usando il software libero [Bareos][27], di nuovo da ricompilare in una versione mantenuta aggiornata);
 * **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store" [in corso di sviluppo in oVirt][28]);
+* **gestione/orchestrazione/provisioning** (usando il software libero [Foreman][66] in una configurazione "simil-[Red Hat Satellite][67]", sia in sostituzione del nostro attuale PC/VD di supporto sia come vm permanente);
 * **spegnimento totale non presidiato** a seguito di eventi esterni (si pensi al caso di piccole realtà con UPS singoli, o anche centralizzati, ma senza la garanzia di alimentazione ininterrotta tramite generatori ecc.).
   
   
@@ -251,3 +252,6 @@ Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate d
 [63]: https://www.ansible.com/
 [64]: https://github.com/Heretic-oVirt/ansible
 [65]: https://github.com/gluster/gluster-block
+[66]: https://www.theforeman.org/
+[67]: https://access.redhat.com/products/red-hat-satellite
+[68]: https://wiki.x2go.org/
