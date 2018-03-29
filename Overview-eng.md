@@ -140,7 +140,7 @@ Obviously, if less than 4 separate networks are available, then the communicatio
 
 A few words on fault tolerance: to have a fault-tolerant solution (and we always mean tolerant to a single fault at a time) all base components must be redundant; we have at least 3 servers (3 and not 2 to always have a qualified majority, ie a "quorum") in our infrastructure, but obviously the use of single switches (eg one single switch for each separated network or a single VLAN-capable switch for all separated networks) would represent a single weak point (SPOF: "single point of failure") which would be enough to invalidate the fault-tolerance of the whole infrastructure; our example setups do not include that for simplicity, but all switches should always be double and stacked (2 stacked switches for each separated network or 2 stacked VLAN-capable switches for all separated networks) and all server network ports should always be connected to separated networks at least in pairs.  
 
-##### The PC/VD installation
+##### The support PC/VD installation
 
 Once the installation of the support PC/VD (this too managed by a dedicated Kickstart) has been started (eg from a standard CentOS7 DVD), after having optionally specified on the kernel commandline (apart from the location of the aforementioned Kickstart, for example with inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks) any custom parameters (all prefixed with hvp_; the complete list with explanation and default values is provided in the comments at the top of each Kickstart file), you need only to wait for the automatic restart to find yourself in front of the classic CentOS7 GNOME3 graphical login (username and password to login are customizable and default values are documented in the internal Kickstart comments).
   
@@ -154,7 +154,7 @@ At the end of the installation, the support PC/VD will be immediately ready to p
 * A repository for Bash scripts and Ansible playbooks to automate the final phase of the configuration process (after all servers have been installed)
   
   
-####  The servers
+####  The servers installation
 
 The next step (to be repeated for each of the server machines that will make up the permanent infrastructure) is to connect the servers to the separate networks.
 Depending on the availability of network ports on the servers (even a single port per separate network is supported, obviously losing the redundancy in that case), it is possible to connect (always arbitrarily) more than one network port of each server to the same separate network (ie dedicated switch or VLAN) and, in the subsequent installation phase, the Kickstart (unique for all servers) will recognize and interpret this situation as an intention to unify the links for redundancy and load balancing (the so-called "bonding", with bonding mode defined by default parameters and controllable by means of kernel commandline options or configuration fragments).
@@ -181,19 +181,19 @@ At any "fixed point" reached by the automation it is always possible to inspect 
 
 The automated configuration (partly under development) that follows the installation step is based on Ansible playbooks (created by the installation on the support PC/VD under /usr/local/etc/hvp-ansible as well as in /etc/ansible/hosts and under /etc/ansible/group_vars) which perform (in addition to service steps such as the propagation of SSH keys and the retrieval of data on nodes, such as the number and size of available disks, to drive the subsequent logic) the following ordered steps:  
 
-1. the gDeploy configuration file gets generated and used to create the shared storage layer based on Gluster (a corresponding interactive step is available through the Node Cockpit web interface) with an automated logic of disk choice in order to compose each one of the expected Gluster volumes (we support up to three disks on each server in order to create Gluster volumes dedicated to: oVirt Engine, other oVirt vms, ISO images, CTDB/NFS-Ganesha locking/clustering, CIFS/Windows file sharing and NFS/Unix file sharing; a further volume dedicated to Gluster-Block iSCSI/FCoE services will be added)
+1. the gDeploy configuration file gets generated and used to create the shared storage layer based on Gluster (a corresponding interactive step is available through the Node Cockpit web interface) with an automated logic of disk choice in order to compose each one of the expected Gluster volumes (we support up to three disks on each server in order to create Gluster volumes dedicated to: oVirt Engine, other oVirt vms, ISO images, CTDB/NFS-Ganesha locking/clustering, Gluster-Block for iSCSI services, CIFS/Windows file sharing and NFS/Unix file sharing)
 2. the oVirt Self Hosted Engine answers file gets generated and the installation performed on "Node 0" (a corresponding interactive step is available through the Node Cockpit web interface)
 3. the Gluster storage domains get configured in oVirt (importing the Datacenter main storage domain, an action which causes the automatic addition of the Self Hosted Engine storage domain and subsequently of the Engine vm within)
 4. further nodes beyond "Node 0" gets added to the oVirt cluster 
-5. OVN and further (beyond management) networks get configured both on the Engine and on nodes (a couple of further internal isolated OVN networks, for security/test purposes, will be added)
-6. CTDB, Samba and Gluster-NFS services gets configured and started (Gluster-block will be added, while Gluster-NFS will be replaced by NFS-Ganesha), all of those relying on Gluster volumes (here lies the first _heresy_: we use the hyperconverged storage also for file sharing, not only for virtualization)
+5. OVN and further (beyond management) networks get configured both on the Engine and on nodes (creating a couple of further internal isolated OVN networks, for security/test purposes)
+6. CTDB, Samba, Gluster-NFS and Gluster-block services gets configured and started (Gluster-NFS will be replaced by NFS-Ganesha in the not-too-disatnt future), all of those relying on Gluster volumes (here lies the first _heresy_: we use the hyperconverged storage also for file sharing, not only for virtualization)
 7. NFS storage domains get configured in oVirt (currently only the ISO domain)
-8. additional virtual machines get created on the oVirt infrastructure (to be installed from-scratch by means of dedicated Kickstarts; this automation is still being developed):
+8. additional virtual machines get created on the oVirt infrastructure (installed from-scratch by means of dedicated Kickstarts; this automation is still being developed):
     1. an Active Directory domain controller with automated from-scratch creation of a new domain (another _heresy_: we use CentOS7 with a modified Fedora Samba package rebuilt to activate DC functions using internal Heimdal Kerberos libraries etc.)
     2. a printer server member of the Active Directory domain above
-    3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird or, real _heresy_ ;-) , SQLServer!)
+    3. a database server member of the Active Directory domain above (CentOS7 with a choice of: PostgreSQL, MySQL, Firebird, MongoDB or, real _heresy_ ;-) , SQLServer!)
     4. a CentOS7 remote desktop server ([X2Go][68] based) member of the Active Directory domain above
-    5. other optional vms (still being developed: an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all members of the Active Directory domain above)
+    5. other optional vms (still being determined/developed: an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all being members of the Active Directory domain above)
 9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
 
 The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
@@ -205,7 +205,7 @@ We must stress tha fact that all the tests and the development performed so far 
 We must also stress that, as a further form of provocation/_heresy_, our project uses (always created and published as noted above):  
 
 * the **Gluster/Samba/Ganesha packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
-* the **Openvswitch and OVN packages rebuilt from Fedora sources** of more recent versions
+* the **Openvswitch packages from RDO and OVN packages rebuilt from Fedora sources** of more recent versions
   
   
 
