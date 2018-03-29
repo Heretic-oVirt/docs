@@ -183,7 +183,7 @@ In qualunque "punto fermo" raggiunto dall'automazione è sempre possibile ispezi
   
 La configurazione automatizzata successiva (in parte in fase di sviluppo) è basata su playbook Ansible (fatti trovare già pronti dall'installazione sul PC/VD di supporto sotto /usr/local/etc/hvp-ansible oltre che in /etc/ansible/hosts e sotto /etc/ansible/group_vars ) che (oltre a passi di servizio quali la propagazione delle chiavi SSH ed il reperimento di dati sui nodi, quali numero e dimensione dei dischi disponibili, per pilotare le logiche successive) compiono i seguenti passi nell'ordine:  
 
-1. generano il file di configurazione gDeploy ed effettuano la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, file sharing CIFS/Windows e file sharing NFS/Unix; un ulteriore volume dedicato a Gluster-Block per i servizi iSCSI/FCoE verrà aggiunto in seguito)
+1. generano il file di configurazione gDeploy ed effettuano la creazione dello strato storage basato su Gluster (analogo alla fase corrispondente disponibile tramite Node Cockpit) con logica automatica di scelta dei dischi da dedicare a ciascuno dei volumi Gluster previsti (su ogni server sono gestiti fino a tre dischi per i dati dei volumi Gluster dedicati a: oVirt Engine, altre vm oVirt, immagini ISO, locking/clustering CTDB/NFS-Ganesha, Gluster-Block per i servizi iSCSI, file sharing CIFS/Windows e file sharing NFS/Unix)
 2. generano il file di configurazione ed effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
 3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
@@ -222,7 +222,7 @@ A conclusione ricordiamo che abbiamo in progetto di porre mano a breve ad alcuni
   
 Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate di:  
 
-* **backup** (usando il software libero [Bareos][27], di nuovo da ricompilare in una versione mantenuta aggiornata);
+* **backup** (usando il software libero [Bareos][27], ricompilato dalle versioni mantenute aggiornate);
 * **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store" [in corso di sviluppo in oVirt][28]);
 * **gestione/orchestrazione/provisioning** (usando il software libero [Foreman][66] in una configurazione "simil-[Red Hat Satellite][67]", sia in sostituzione del nostro attuale PC/VD di supporto sia come vm permanente);
 * **spegnimento totale non presidiato** a seguito di eventi esterni (si pensi al caso di piccole realtà con UPS singoli, o anche centralizzati, ma senza la garanzia di alimentazione ininterrotta tramite generatori ecc.).
