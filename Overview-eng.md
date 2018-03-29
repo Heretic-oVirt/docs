@@ -154,14 +154,21 @@ At the end of the installation, the support PC/VD will be immediately ready to p
 * A repository for Bash scripts and Ansible playbooks to automate the final phase of the configuration process (after all servers have been installed)
   
   
-####  The servers installation
+####  The servers
 
 The next step (to be repeated for each of the server machines that will make up the permanent infrastructure) is to connect the servers to the separate networks.
+
+##### The networks
+
 Depending on the availability of network ports on the servers (even a single port per separate network is supported, obviously losing the redundancy in that case), it is possible to connect (always arbitrarily) more than one network port of each server to the same separate network (ie dedicated switch or VLAN) and, in the subsequent installation phase, the Kickstart (unique for all servers) will recognize and interpret this situation as an intention to unify the links for redundancy and load balancing (the so-called "bonding", with bonding mode defined by default parameters and controllable by means of kernel commandline options or configuration fragments).
 
 The list of supported separate networks is the same as listed above in the case of the support PC/VD (but in the servers case the order of the networks no longer matters, because the presence of the support PC/VD allows the Kickstart to identify exactly which network each port is connected to) and, in the subsequent installation phase, the Kickstart will recognize the network ports arbitrarily connected and will assign them to the various networks (further control on those networks, from IP addressing to MTU, can be exercised by means of kernel commandline parameters or by custom configuration files).
 
+##### The remote management controllers
+
 Any server remote management hardware (called iLO for HPE servers like ours or iDRAC for Dell servers, but other vendors have similar, sometimes optional, solutions under the name of BMC or IPMI) should be connected to the separate management network and the support PC/VD can be used to access the remote console offered by these out-of-band management solutions.
+
+##### The servers installation
 
 The actual installation of the server machines is expected to happen by means of network boot (PXE), which means that on the server machines the network boot option must be activated by firmware (BIOS or UEFI) and there must be at least one of the network ports selected as a boot device (an option which is again dependent on the firmware, but the first of the embedded network cards is usually a safe choice to make) and connected to the management network mentioned above (that is: connected to the appropriate dedicated switch or VLAN).
 
