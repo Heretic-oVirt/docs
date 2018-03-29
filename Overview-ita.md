@@ -156,16 +156,23 @@ Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a
 * Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutti i server)
   
   
-####  L'installazione dei server
+####  I server
 
   
 Il passo successivo (da ripetere per ognuna delle macchine server che costituiranno l'infrastruttura permanente) è quello di collegare i server alle reti isolate.  
+
+##### Le reti
+
 A seconda della disponibilità di porte di rete sui server (ma ne è supportata anche solo una, ovviamente perdendo in quel caso la ridondanza), è possibile collegare (sempre arbitrariamente) più di una porta di rete di ogni server alla medesima rete (ovvero switch dedicato o VLAN) e, nella successiva fase di installazione, il Kickstart (unico per tutti i server) riconoscerà ed interpreterà la situazione come un'intenzione di accorpamento dei link per ridondanza e bilanciamento del traffico (il cosiddetto "bonding", con modalità di bonding definite per default e controllabili tramite opzioni da commandline del kernel o da frammento di configurazione).  
   
 L'elenco delle reti supportate è il medesimo indicato sopra nel caso del PC/VD di supporto (ma per i server non conta più l'ordine delle reti, in quanto la presenza appunto del PC/VD di supporto permette al Kickstart di identificare con esattezza a quale rete ogni porta sia connessa) e, nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete arbitrariamente collegate e le assegnerà alle varie reti (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o da frammento di configurazione).  
-  
+
+##### Le schede di gestione remota
+
 Eventuali schede hardware di gestione remota dei server (le iLO, nei casi dei server HPE come i nostri, o le iDRAC per i server Dell; altri produttori hanno soluzioni analoghe, a volte opzionali, sotto il nome di BMC o schede IPMI) vanno collegate alla rete isolata di gestione ed il PC/VD di supporto può essere utilizzato per accedere alla console remota offerta da tali schede.  
   
+#####  L'installazione dei server
+
 L'installazione concreta delle macchine server si prevede che avvenga tramite boot da rete (PXE), il che significa che sulle macchine server l'opzione di boot da rete deve essere attivata da firmware (BIOS o UEFI) e ci deve essere almeno una delle porte di rete predisposte al boot (quali siano dipende di nuovo dal firmware, ma la prima di quelle incorporate di solito è una scelta sicura) connessa alla rete di gestione sopra citata (ovvero: connessa al relativo switch dedicato o VLAN).  
   
 La macchina server avviata da rete presenterà un menu di boot con voci precompilate (le ha create l'installazione del PC/VD di supporto, propagando anche eventuali modifiche ai default operate tramite opzioni da commandline del kernel, modifiche che non dovranno quindi essere ripetute) e l'unica scelta interattiva da compiere sarà selezionare il tipo (un server completo basato su CentOS, indicato come "Host", oppure un server minimale basato su oVirt-NextGenerationNode, indicato come "NGN") e l'identità (identificata come "Node 0", "Node 1" o "Node 2") della macchina che si sta installando, premere Invio ed attendere il prompt ad installazione terminata.  
