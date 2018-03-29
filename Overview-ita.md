@@ -142,7 +142,7 @@ Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il t
 
 Poche parole relative alla resistenza ai guasti ("fault tolerance"): perché una soluzione sia resistente ai guasti (e si intende sempre al più un singolo guasto qualsiasi alla volta) le componenti base devono essere ridondate; abbiamo almeno 3 server (3 e non 2 per avere sempre una maggioranza qualificata, ovvero un "quorum") per l'infrastruttura, ma ovviamente la presenza di switch singoli (ad esempio un solo switch per ogni rete isolata o un solo switch dotato di VLAN per ospitare tutte le reti isolate) presenterebbe un singolo punto debole (SPOF: "single point of failure") sufficiente ad inficiare la resistenza ai guasti; nei nostri setup per semplicità non lo abbiamo elencato, ma gli switch dovrebbero sempre essere doppi in cascata (2 switch in cascata per ogni rete isolata o 2 switch in cascata dotati di VLAN per ospitare tutte le reti isolate) e le porte di rete connesse da ogni server verso ogni rete separata dovrebbero sempre essere almeno doppie.  
 
-##### L'installazione del PC/VD
+##### L'installazione del PC/VD di supporto
 
 Una volta avviata (ad esempio da un normale DVD CentOS7) l'installazione del PC/VD di supporto (anche questa gestita da un apposito Kickstart dedicato), dopo aver opzionalmente specificato sulla riga di comando del kernel (oltre alla collocazione del suddetto Kickstart, ad esempio con inst.ks=https://dangerous.ovirt.life/hvp-repos/el7/ks/heresiarch.ks ) eventuali parametri custom (tutti con prefisso hvp_ ; l'elenco completo con spiegazione e relativi valori di default è fornito nei commenti in cima ad ogni Kickstart), si attende il riavvio automatico per ritrovarsi davanti al classico login grafico GNOME3 di CentOS7 (anche username e password per accedere sono personalizzabili ed i default sono documentati nei commenti interni ai Kickstart).  
   
@@ -156,7 +156,7 @@ Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a
 * Repository di script Bash e playbook Ansible per automatizzare la fase finale della configurazione (dopo l'installazione di tutti i server)
   
   
-####  I server
+####  L'installazione dei server
 
   
 Il passo successivo (da ripetere per ognuna delle macchine server che costituiranno l'infrastruttura permanente) è quello di collegare i server alle reti isolate.  
@@ -187,15 +187,15 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 2. generano il file di configurazione ed effettuano l'installazione del Self Hosted Engine oVirt sul "Node 0" (analogo alla fase corrispondente disponibile tramite Node Cockpit)
 3. configurano gli storage domain Gluster in oVirt (importando lo storage domain principale del Datacenter, azione che causa l'automatico riconoscimento dello storage domain del Self Hosted Engine e della vm Engine in esso contenuta)
 4. aggiungono al cluster oVirt i nodi rimanenti oltre il "Node 0"
-5. configurano OVN ed altre reti (oltre a quella di management) sull'Engine e sui nodi (a breve creando anche un paio di reti interne isolate OVN potenzialmente utili per motivi di sicurezza e/o di test)
-6. configurano ed avviano i servizi CTDB, Samba e Gluster-NFS (a breve anche Gluster-block, mentre Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
+5. configurano OVN ed altre reti (oltre a quella di management) sull'Engine e sui nodi (creando anche un paio di reti interne isolate OVN potenzialmente utili per motivi di sicurezza e/o di test)
+6. configurano ed avviano i servizi CTDB, Samba, Gluster-NFS e Gluster-block (Gluster-NFS verrà in futuro sostituito da NFS-Ganesha) basati su volumi Gluster (qui sta una prima _eresia_: usare lo storage iperconvergente anche per file sharing e non solo per la virtualizzazione)
 7. configurano gli storage domain NFS in oVirt (attualmente solo quello delle immagini ISO)
-8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte da installare ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
+8. creano virtual machine aggiuntive sull'infrastruttura oVirt (tutte installate ex-novo tramite Kickstart dedicati analoghi ai precedenti; questa automazione è ancora in fase di realizzazione):
     1. un domain controller Active Directory con creazione automatizzata di un dominio ex-novo (seconda _eresia_: CentOS7 con pacchetto Samba preso da Fedora modificato e ricompilato per attivare le funzioni di DC usando le librerie Kerberos interne Heimdal ecc.)
     2. un printer server membro del dominio Active Directory di cui sopra
-    3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird o, vera _eresia_ ;-) , SQLServer!)
+    3. un database server membro del dominio Active Directory di cui sopra (CentOS7 con a scelta: PostgreSQL, MySQL, Firebird, MongoDB o, vera _eresia_ ;-) , SQLServer!)
     4. un remote desktop server (basato su [X2Go][68]) CentOS7, membro del dominio Active Directory di cui sopra
-    5. altre vm opzionali (ancora in fase di realizzazione: un server gestionale che si appoggi al DB server di cui sopra, un server di messaggistica/comunicazione, un server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
+    5. altre vm opzionali (ancora in fase di valutazione/realizzazione: un server gestionale che si appoggi al DB server di cui sopra, un server di messaggistica/comunicazione, un server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano il Samba file server sui nodi Gluster come membro del dominio Active Directory di cui sopra
 
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml ), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
@@ -207,7 +207,7 @@ Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno rig
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
 * i **pacchetti Gluster/Samba/Ganesha** non community, bensì **ricompilati dai sorgenti di RHGS** (il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
-* i **pacchetti Openvswitch ed OVN ricompilati da versioni Fedora** più recenti
+* i **pacchetti Openvswitch presi da RDO ed OVN ricompilati da versioni Fedora** più recenti
   
   
 
