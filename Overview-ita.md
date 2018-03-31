@@ -10,7 +10,7 @@ Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione ch
 
 Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": [SDDC][70].
   
-###  Il progetto HVP
+###  Il progetto
 
 Il sito del progetto si trova all'URL:  
   
@@ -204,6 +204,7 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
     4. un remote desktop server (basato su [X2Go][68]) CentOS7, membro del dominio Active Directory di cui sopra
     5. altre vm opzionali (ancora in fase di valutazione/realizzazione: un server gestionale che si appoggi al DB server di cui sopra, un server di messaggistica/comunicazione, un server firewall/proxy/VPN ecc. tutti membri del dominio Active Directory di cui sopra)
 9. riconfigurano il Samba file server sui nodi Gluster come membro del dominio Active Directory di cui sopra
+10. installano e configurano una completa infrastruttura di backup (basata su [Bareos][27])
 
 L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml ), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
@@ -224,10 +225,10 @@ Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro
 A conclusione ricordiamo che abbiamo in progetto di porre mano a breve ad alcuni aspetti, in ordine di importanza:  
 
 1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart e della presente panoramica generale, ma aggiungendo anche un guida rapida all'utilizzo ed una guida tecnica più approfondita;
-2. **migliorare la parte Ansible/gDeploy** (ospitata nell'[apposito repository Github][64]) in modo da renderla generalmente usabile e più conforme agli standard per moduli/playbook;
+2. **migliorare la parte Ansible/gDeploy** (ospitata nell'[apposito repository Github][64]) in modo da renderla generalmente usabile (idealmente senza dipendere da installazioni effettuate coi nostri Kickstart) e più conforme agli standard per moduli/playbook;
 3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** ([RHV][69] è l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
   
-Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate di:  
+Tra gli ulteriori sviluppi futuri (alcuni dei quali sono già stati intrapresi) c'è anche l'aggiunta di soluzioni integrate di:  
 
 * **backup** (usando il software libero [Bareos][27], ricompilato dalle versioni mantenute aggiornate);
 * **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store" [in corso di sviluppo in oVirt][28]);
