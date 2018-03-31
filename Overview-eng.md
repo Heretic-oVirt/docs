@@ -4,11 +4,11 @@
 
 ###  What is this about 
 
-This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10] with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated networking (by means of [OVN][18]) and file sharing (by means of [Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]) functions.
+This project aims at the automatic (non interactive) and from-scratch (using new/recycled machines) setup of a complete enterprise infrastructure based on [oVirt][10] with [Self Hosted Engine][60] (ie with the oVirt Engine, the machine controlling the whole infrastructure, hosted as a virtual machine inside the infrastructure itself), hyperconverged (ie with [Gluster][16] storage provided by the same machines that provide virtualization services), single-fault tolerant and with advanced integrated networking (by means of [OVN][18]) and file sharing (by means of [CTDB][19]/[Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]) functions.
 
 By "_complete enterprise infrastructure_" we mean a solution based on standard hardware (64 bit Intel/AMD compatible machines, absolutely off-the-shelf) which _using free software provides all functionalities_ needed by a full range of enterprises, from the smallest up to the medium/large ones (obviously by scaling the hardware specifications accordingly).
 
-Since we realize everything, from virtualization to storage and networking, by means of software, we can say that in the end we create a "Software Defined Data Center": SDDC.
+Since we realize everything, from virtualization to storage and networking, by means of software, we can say that in the end we create a "Software Defined Data Center": [SDDC][70].
 
 ###  The HVP project
 
@@ -211,7 +211,7 @@ We must stress tha fact that all the tests and the development performed so far 
 
 We must also stress that, as a further form of provocation/_heresy_, our project uses (always created and published as noted above):  
 
-* the **Gluster/Samba/Ganesha packages** not from the community version, but **rebuilt from RHGS sources** (RHGS is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
+* the **Gluster/Samba/Ganesha packages** not from the community version, but **rebuilt from RHGS sources** ([RHGS][17] is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
 * the **Openvswitch packages from RDO and OVN packages rebuilt from Fedora sources** of more recent versions
   
   
@@ -223,7 +223,7 @@ Concluding we note that the project intends to work on the following pending poi
 
 1. **Document what we did**, not only in form of comments inside scripts/Kickstarts and of this general overview, but also by adding a quickstart guide and a detailed technical guide;
 2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful and adhering to standards for playbooks/modules;
-3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** (RHV is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
+3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** ([RHV][69] is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
 Among further future developments there are also integrated solutions for:  
 
@@ -260,3 +260,5 @@ Among further future developments there are also integrated solutions for:
 [66]: https://www.theforeman.org/
 [67]: https://access.redhat.com/products/red-hat-satellite
 [68]: https://wiki.x2go.org/
+[69]: https://www.redhat.com/en/technologies/virtualization/enterprise-virtualization
+[70]: https://en.wikipedia.org/wiki/Software-defined_data_center
