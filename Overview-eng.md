@@ -10,7 +10,7 @@ By "_complete enterprise infrastructure_" we mean a solution based on standard h
 
 Since we realize everything, from virtualization to storage and networking, by means of software, we can say that in the end we create a "Software Defined Data Center": [SDDC][70].
 
-###  The HVP project
+###  The project
 
 The project web site can be found at the URL:  
   
@@ -202,6 +202,7 @@ The automated configuration (partly under development) that follows the installa
     4. a CentOS7 remote desktop server ([X2Go][68] based) member of the Active Directory domain above
     5. other optional vms (still being determined/developed: an ERP server using the DB server above, a messaging server, a firewall/proxy/VPN server ecc. all being members of the Active Directory domain above)
 9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
+10. A complete backup infrastructure ([Bareos][27] based) gets installed and configured
 
 The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
 
@@ -222,10 +223,10 @@ We must also stress that, as a further form of provocation/_heresy_, our project
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
 1. **Document what we did**, not only in form of comments inside scripts/Kickstarts and of this general overview, but also by adding a quickstart guide and a detailed technical guide;
-2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful and adhering to standards for playbooks/modules;
+2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful (ideally not strictly depending on the Kickstart-based installations) and adhering to standards for playbooks/modules;
 3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** ([RHV][69] is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
-Among further future developments there are also integrated solutions for:  
+Among further future developments (some of which have been already started) there are also integrated solutions for:  
 
 * **backup** (using the [Bareos][27] free software, recompiled from updated versions);
 * **monitoring** (centralized gathering of logs and/or integration with the "Metrics Store" solution [being developed for oVirt][28]);
