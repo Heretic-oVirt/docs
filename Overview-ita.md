@@ -1,4 +1,4 @@
-# Heretic oVirt Project - Panoramica
+# Heretic oVirt Project (HVP) - Panoramica
 
 ## Introduzione
 
