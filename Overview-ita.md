@@ -4,11 +4,11 @@
 
 ###  Di cosa si tratta 
 
-Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
+Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [CTDB][19]/[Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
   
 Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
 
-Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": SDDC.
+Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": [SDDC][70].
   
 ###  Il progetto HVP
 
@@ -213,7 +213,7 @@ Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno rig
   
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
-* i **pacchetti Gluster/Samba/Ganesha** non community, bensì **ricompilati dai sorgenti di RHGS** (il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
+* i **pacchetti Gluster/Samba/Ganesha** non community, bensì **ricompilati dai sorgenti di RHGS** ([RHGS][17] è il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
 * i **pacchetti Openvswitch presi da RDO ed OVN ricompilati da versioni Fedora** più recenti
   
   
@@ -225,7 +225,7 @@ A conclusione ricordiamo che abbiamo in progetto di porre mano a breve ad alcuni
 
 1. **documentare quanto fatto**, non solo in forma di commenti interni agli script/Kickstart e della presente panoramica generale, ma aggiungendo anche un guida rapida all'utilizzo ed una guida tecnica più approfondita;
 2. **migliorare la parte Ansible/gDeploy** (ospitata nell'[apposito repository Github][64]) in modo da renderla generalmente usabile e più conforme agli standard per moduli/playbook;
-3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** (l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
+3. investigare la fattibilità e l'interesse generale per un progetto di **ricompilazione dei pacchetti oVirt** non community, bensì presi **dai sorgenti di RHV** ([RHV][69] è l'oVirt con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile.
   
 Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate di:  
 
@@ -262,3 +262,5 @@ Tra gli ulteriori sviluppi futuri c'è anche l'aggiunta di soluzioni integrate d
 [66]: https://www.theforeman.org/
 [67]: https://access.redhat.com/products/red-hat-satellite
 [68]: https://wiki.x2go.org/
+[69]: https://www.redhat.com/en/technologies/virtualization/enterprise-virtualization
+[70]: https://en.wikipedia.org/wiki/Software-defined_data_center
