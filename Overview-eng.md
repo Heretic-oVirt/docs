@@ -20,7 +20,7 @@ while all the development happens on Github:
   
 https://github.com/Heretic-oVirt
   
-The reason for the name "**Heretic**" (and for the tongue-in-cheek name of the web site) lays in our choice of applying some of the aforementioned technologies in a way that is not the one currently deemed "orthodox", ie "formally supported" on the "Enterprise" offerings (ie subject to payment, because bound to a support contract) of those same technologies (the "heretic" choices will be _underlined_ below).  
+The reason for the name "**Heretic**" (and for the tongue-in-cheek name of the web site) lays in our choice of applying some of the aforementioned technologies in a way that is not the one currently deemed "orthodox", ie "formally supported" on the "Enterprise" offerings (ie subject to payment, because bound to a support contract) of those same technologies (the "heretic" choices will be _emphasized_ below).  
   
 
 ##  The hardware side
