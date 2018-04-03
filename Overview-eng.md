@@ -95,7 +95,7 @@ It consists of a generic configuration management solution which, starting from 
 ####  gDeploy
 
 
-It consists of a specialized Gluster/RHGS infrastructure setup automation system which, based on a textual description (in INI file format) of the desired state (IP/names of the machines member of the trusted pool, LVM disk configurations for each machine, logical volumes formatting to create the bricks, Gluster volumes creation from the bricks), automatically generates the Ansible playbooks (see above) needed to reach it.
+It consists of a specialized Gluster/RHGS infrastructure setup automation system which, based on a textual description (in INI file format) of the desired state (IP/names of the machines member of the trusted pool, LVM disk configurations for each machine, logical volumes formatting to create the bricks, Gluster volumes creation from the bricks), automatically generates and runs the Ansible playbooks (see above) needed to reach it.
   
   
 #### How we combine the automation technologies
