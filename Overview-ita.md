@@ -97,7 +97,7 @@ Si tratta di un sistema assolutamente generico di gestione della configurazione 
 ####  gDeploy
 
   
-Si tratta di un sistema di automazione della creazione di infrastrutture Gluster/RHGS che, basandosi su di una descrizione testuale (un file in formato INI) dello stato desiderato (nomi/IP delle macchine che devono comporre il trusted pool, configurazione dei dischi tramite LVM su ogni macchina, formattazione dei logical volume per ottenere i brick, creazione dei volumi Gluster a partire dai brick), genera automaticamente i playbook Ansible (vedi sopra) per ottenere quanto descritto.  
+Si tratta di un sistema di automazione della creazione di infrastrutture Gluster/RHGS che, basandosi su di una descrizione testuale (un file in formato INI) dello stato desiderato (nomi/IP delle macchine che devono comporre il trusted pool, configurazione dei dischi tramite LVM su ogni macchina, formattazione dei logical volume per ottenere i brick, creazione dei volumi Gluster a partire dai brick), genera ed esegue automaticamente i playbook Ansible (vedi sopra) per ottenere quanto descritto.  
   
   
 #### Come combiniamo le tecnologie di automazione tra loro
