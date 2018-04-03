@@ -65,7 +65,7 @@ Our laboratory environment contains three different setups, two physical and one
 * 1 virtual desktop machine made of:
     * 2 GiB RAM and 1 CPU core
     * 5 x virtual network adapters
-* 1 virtuale LAN in NAT mode and 4 isolated virtual LAN segments
+* 1 virtual LAN in NAT mode and 4 isolated virtual LAN segments
   
 The generic PC/VD is meant only as a support machine during setup but it is expected to be decommissioned after setup has been completed.
 We also validated a mixed setup with only the generic PC/VD being virtual, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
