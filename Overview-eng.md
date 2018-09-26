@@ -69,7 +69,7 @@ Our laboratory environment contains three different setups, two physical and one
   
 The generic PC/VD is meant only as a support machine during setup but it is expected to be decommissioned after setup has been completed.
 We also validated a mixed setup with only the generic PC/VD being virtual, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
-Finally, a minimal setup with only one server has been recently tested (requires the latest oVirt version: 4.2), obviously setting apart almost all fault-tolerance functionalities (still viable as a demo / proof of concept or as an initial solution for really small deployments, waiting to make it scale to three servers).
+Finally, a minimal setup with only one server has been recently tested (requires at least oVirt version 4.2), obviously setting apart almost all fault-tolerance functionalities (still viable as a demo / proof of concept or as an initial solution for really small deployments, waiting to make it scale to three servers).
 
 
 ##  The automation technologies
