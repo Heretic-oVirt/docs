@@ -6,7 +6,7 @@
 
 Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [CTDB][19]/[Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
   
-Quando diciamo "_infrastruttura aziendale completa_" intendiamo una soluzione che, basandosi su hardware assolutamente standard (macchine a 64 bit Intel/AMD compatibili, del tutto generiche), _realizzi tramite software libero tutte le funzionalità_ che possono servire a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
+Quando diciamo "**infrastruttura aziendale completa**" intendiamo una soluzione (basata su hardware assolutamente standard: macchine a 64 bit Intel/AMD compatibili, del tutto generiche) che **realizzi tramite software libero tutte le funzionalità** che possono servire a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
 
 Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": [SDDC][70].
   
@@ -69,6 +69,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
   
 Lo scopo del PC/VD generico è quello di fare da supporto solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
 È stato sperimentato anche un setup misto nel quale solo il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
+Infine, è stato recentemente provsto un setup minimale con un solo server (richiede almeno la versione 4.2 di oVirt), ovviamente tralasciando a questo punto pressoché tutte le funzionalità di resistenza ai guasti (ma pur sempre valido come dimostrazione / prova di implementazione, o come soluzione iniziale per realtà molto piccole, in attesa di espanderla a tre server). 
   
 
 ##  Le tecnologie di automazione
@@ -79,13 +80,14 @@ La nostra soluzione si basa:
 * per la parte iniziale sull'assodata tecnologia di automazione dell'installazione presente in CentOS/Fedora/RHEL: **[Kickstart][61]**
 * per la parte successiva su nuove tecnologie di automazione della configurazione: **[gDeploy][62]** e **[Ansible][63]**
 
+Le succitate tecnologie di automazione verranno di seguito brevemente presentate.
 
 ####  Kickstart
 
   
 Si tratta di un file di testo tramite il quale si istruisce il programma di installazione (detto Anaconda) di CentOS/Fedora/RHEL a configurare da zero la macchina in maniera non interattiva (sostanzialmente si forniscono tutte le risposte alle domande che la modalità interattiva porrebbe, più altre scelte che anche in maniera interattiva non sarebbe semplice effettuare e richiederebbero invece un notevole lavoro o preventivo sull'hardware o successivo sulla macchina una volta installata).  
   
-La grande flessibilità della tecnologia Kickstart risiede nella possibilità di fare precedere e seguire la fase che si sostituisce propriamente alle scelte interattive da altre fasi costituite dall'esecuzione di script, script definibili a piacere da chi compone il file di Kickstart.  
+La grande flessibilità della tecnologia Kickstart risiede nella possibilità di fare precedere e seguire la fase che si sostituisce propriamente alle scelte interattive da fasi costituite dall'esecuzione di script, script definibili a piacere da chi compone il file di Kickstart.  
   
 
 ####  Ansible
@@ -103,7 +105,7 @@ Si tratta di un sistema di automazione della creazione di infrastrutture Gluster
 #### Come combiniamo le tecnologie di automazione tra loro
 
 
-Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi identificate dalle direttive %pre e %post) degli script in Bash che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri custom (per modificare i valori di default da noi scelti) passati tramite la commandline del kernel all'avvio (o tramite frammenti di configurazione reperiti assieme al file di Kickstart), effettuano un autoriconoscimento e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti storage (come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best practices" pubblicate) e così via.  
+Per venire al nostro caso specifico, abbiamo inserito nei Kickstart (nelle fasi opzionali identificate dalle direttive %pre e %post) degli script in Bash che, avvalendosi dei normali comandi Linux presenti nell'ambiente minimale di installazione e opzionalmente riconoscendo alcuni parametri custom (per modificare i valori di default da noi scelti) passati tramite la commandline del kernel all'avvio (o tramite frammenti di configurazione reperiti assieme al file di Kickstart), effettuano un autoriconoscimento e una configurazione dell'intero ambiente hardware: connessioni di rete (decidere quali porte di rete appartengono a quale rete), destinazione delle parti storage (come usare i vari dischi presenti), ruolo della macchina specifica (assegnare l'identità del nodo nel gruppo di macchine oVirt), parametri specifici del software (conformandosi, per quanto possibile, alle cosiddette "best practices" pubblicate) e così via.  
   
 Tali configurazioni automatiche non si fermano a quanto necessario in fase di installazione, ma creano e fanno trovare pronti anche i file di configurazione necessari ad attivare ex-novo funzionalità ulteriori non usualmente presenti nelle installazioni interattive, in particolare un sistema autosufficiente di risoluzione dei nomi di rete (DNS) sia locali (quelli dei sistemi che andiamo ad installare/creare) sia Internet.  
   
@@ -127,7 +129,7 @@ Si parte dal collegare il PC/VD di supporto:
 
 ##### Le reti
   
-In particolare sugli switch dovranno essere realizzate **da una a quattro reti separate** (ovverosia isolate tra di loro e da tutto il resto, Internet incluso, o perché realizzate su più switch semplici distinti e non collegati o perché realizzate tramite VLAN su switch più sofisticati):  
+In particolare sugli switch sopra menzionati dovranno essere realizzate **da una a quattro reti separate** (ovverosia isolate tra di loro e da tutto il resto, Internet incluso, o perché realizzate su più switch semplici distinti e non collegati o perché realizzate tramite VLAN su switch più sofisticati):  
 
 1. Se il PC/VD avrà una sola porta di rete aggiuntiva (oltre a quella connessa ad Internet), questa dovrà essere connessa ad una rete separata: quella di **gestione** (ospiterà le comunicazioni tra i server, nel loro ruolo di nodi oVirt, e l'Engine oVirt).
 2. Se il PC/VD avrà anche un'altra porta di rete aggiuntiva (come avviene nei nostri setup di esempio elencati sopra), questa dovrà essere connessa ad una ulteriore rete separata: quella di **Gluster** (ospiterà le comunicazioni di sincronizzazione tra i server nel loro ruolo di nodi Gluster).
@@ -136,7 +138,7 @@ In particolare sugli switch dovranno essere realizzate **da una a quattro reti s
   
 Nella successiva fase di installazione, il Kickstart riconoscerà le porte di rete effettivamente collegate e le assegnerà alle varie reti logiche nell'ordine sopra indicato (con appositi parametri, dall'indirizzamento IP alla MTU, controllabili tramite opzioni da commandline del kernel o inserite in appositi file di configurazione).  
   
-Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (dobbiamo sottolineare il fatto che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nei nostri setup abbiamo sempre almeno due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad esclusivo uso di Gluster e la prima rete assorbe tutte le altre funzioni).  
+Ovviamente la presenza di meno di 4 reti separate disponibili farà sì che il traffico relativo alle reti mancanti venga automaticamente spostato su quelle presenti (dobbiamo sottolineare il fatto che è in particolare assai "delicata" la compresenza di gestione oVirt e sincronizzazione Gluster sulla medesima rete, per questo nei nostri setup abbiamo sempre almeno due reti isolate separate: in quel caso automaticamente la seconda rete rimane ad uso pressoché esclusivo di Gluster e la prima rete assorbe tutte le altre funzioni).  
 
 ##### La resistenza ai guasti
 
@@ -161,7 +163,7 @@ Al termine dell'installazione il PC/VD di supporto sarà immediatamente pronto a
   
 Il passo successivo (da ripetere per ognuna delle macchine server che costituiranno l'infrastruttura permanente) è quello di collegare i server alle reti isolate.  
 
-##### Le reti
+##### Le connessioni di rete dei server
 
 A seconda della disponibilità di porte di rete sui server (ma ne è supportata anche solo una, ovviamente perdendo in quel caso la ridondanza), è possibile collegare (sempre arbitrariamente) più di una porta di rete di ogni server alla medesima rete (ovvero switch dedicato o VLAN) e, nella successiva fase di installazione, il Kickstart (unico per tutti i server) riconoscerà ed interpreterà la situazione come un'intenzione di accorpamento dei link per ridondanza e bilanciamento del traffico (il cosiddetto "bonding", con modalità di bonding definite per default e controllabili tramite opzioni da commandline del kernel o da frammento di configurazione).  
   
@@ -206,11 +208,11 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 9. riconfigurano il Samba file server sui nodi Gluster come membro del dominio Active Directory di cui sopra
 10. installano e configurano una completa infrastruttura di backup (basata su [Bareos][27])
 
-L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml ), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
+L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con "ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml"), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
   
-Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno riguardato esclusivamente insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale di infrastrutture basate su **4 e più macchine server** e pure il supporto al più spinoso problema di espandere a 4 e più macchine server una infrastruttura inizialmente creata con 3 macchine server.  
+Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno riguardato principalmente insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale di infrastrutture basate su **1 macchina server** o **4 e più macchine server** e pure il supporto al più spinoso problema dell'espansione di un setup esistente, ad esempio da 1 macchina server a 3 macchine server o da 3 macchine server a 4 e più macchine server.  
   
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
@@ -230,7 +232,7 @@ A conclusione ricordiamo che abbiamo in progetto di porre mano a breve ad alcuni
   
 Tra gli ulteriori sviluppi futuri (alcuni dei quali sono già stati intrapresi) c'è anche l'aggiunta di soluzioni integrate di:  
 
-* **backup** (usando il software libero [Bareos][27], ricompilato dalle versioni mantenute aggiornate);
+* **backup** (usando il software libero [Bareos][27], ricompilato dai sorgenti per motivi di estensione del ciclo di vita utile);
 * **monitoraggio** (accentramento dei log e/o integrazione con le soluzioni di "Metrics Store" [in corso di sviluppo in oVirt][28]);
 * **gestione/orchestrazione/provisioning** (usando il software libero [Foreman][66] in una configurazione "simil-[Red Hat Satellite][67]", sia in sostituzione del nostro attuale PC/VD di supporto sia come vm permanente);
 * **spegnimento totale non presidiato** a seguito di eventi esterni (si pensi al caso di piccole realtà con UPS singoli, o anche centralizzati, ma senza la garanzia di alimentazione ininterrotta tramite generatori ecc.).
