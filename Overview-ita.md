@@ -69,7 +69,7 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
   
 Lo scopo del PC/VD generico è quello di fare da supporto solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
 È stato sperimentato anche un setup misto nel quale solo il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
-Infine, è stato recentemente provsto un setup minimale con un solo server (richiede almeno la versione 4.2 di oVirt), ovviamente tralasciando a questo punto pressoché tutte le funzionalità di resistenza ai guasti (ma pur sempre valido come dimostrazione / prova di implementazione, o come soluzione iniziale per realtà molto piccole, in attesa di espanderla a tre server). 
+Infine, è stato recentemente provato un setup minimale con un solo server (richiede almeno la versione 4.2 di oVirt), ovviamente tralasciando pressoché tutte le funzionalità di resistenza ai guasti (rimanendo pur sempre valido come dimostrazione / prova di implementazione, o come soluzione iniziale per realtà molto piccole, in attesa di espanderla a tre server). 
   
 
 ##  Le tecnologie di automazione
