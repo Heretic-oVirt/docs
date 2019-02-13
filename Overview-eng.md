@@ -67,9 +67,9 @@ Our laboratory environment contains three different setups, two physical and one
     * 5 x virtual network adapters
 * 1 virtual LAN in NAT mode and 4 isolated virtual LAN segments
   
-The generic PC/VD is meant only as a support machine during setup but it is expected to be decommissioned after setup has been completed.
+The generic PC/VD is meant only as a support machine during setup and it is expected to be decommissioned after setup has been completed.
 We also validated a mixed setup with only the generic PC/VD being virtual, hosted on a laptop with 5 network adapters (1 embedded and 4 on Ethernet-USB adapters).
-Finally, a minimal setup with only one server has been recently tested (requires at least oVirt version 4.2), obviously setting apart almost all fault-tolerance functionalities (still viable as a demo / proof of concept or as an initial solution for really small deployments, waiting to make it scale to three servers).
+Finally, a minimal setup with only one server has been recently tested (requires at least oVirt version 4.2), obviously setting apart almost all fault-tolerance functionalities (still viable as a demo / proof of concept or as an initial solution for really small deployments, capable of being scaled to three servers later on).
 
 
 ##  The automation technologies
@@ -206,16 +206,16 @@ The automated configuration (partly under development) that follows the installa
 9. Samba as a file server on the Gluster nodes gets reconfigured as an Active Directory (see above) domain member
 10. A complete backup infrastructure ([Bareos][27] based) gets installed and configured
 
-The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing "ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml"), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
+The starting (as root user from the support PC/VD) of the steps above must be performed manually (eg by issuing "ansible-playbook /usr/local/etc/hvp-ansible/site.yaml"), but this is only meant to give way to the person performing the setup to choose the appropriate time and maybe to apply manual tweaks to parameters and steps beforehand: after the launching of the playbook, everything happens non-interactively.
 
 All the software used has been made available (if modified in the course of the project) in custom [yum repositories][25] together with the corresponding source packages (all packages have been produced using mock and have beeen signed with the [project GPG key][26]).
 
-We must stress tha fact that all the tests and the development performed so far have been mainly concerned with a set of **exactly 3** **server machines**, and in this case one of those 3, to be installed as "Node 2" (ie that one cited in the setups above as "_the last server_"), will be configured as a pure "**arbiter**" (ie it does not handle/replicate data but only metadata for all files) for all Gluster volumes, thus allowing to use a less "performant" machine, disk/CPU-wise, without impacting global performances; we expect nonetheless to support the initial creation of an infrastructure based on **1 server machine** or **4 and more server machines** and also to support the more delicate issue of expanding an existing setup, eg from 1-server-machine to 3-server-machines or from 3-server-machines to 4-or-more-server-machines.
+We must stress tha fact that all the tests and the development performed so far have been mainly concerned with a set of **exactly 3** **server machines**, and in this case one of those 3, to be installed as "Node 2" (ie that one cited in the setups above as "_the last server_"), will be configured as a pure "**arbiter**" (ie it does not handle/replicate data but only metadata for all files) for all Gluster volumes, thus allowing to use a less "performant" machine, disk/CPU-wise, without impacting global performances; we nonetheless currently support the initial creation of an infrastructure based on **1 server machine** (needing at least oVirt version 4.2) while we expect to support in the near future **4 and more server machines** and also the more delicate issue of expanding an existing setup, eg from 1-server-machine to 3-server-machines or from 3-server-machines to 4-or-more-server-machines.
 
 We must also stress that, as a further form of provocation/_heresy_, our project uses (always created and published as noted above):  
 
 * the **Gluster/Samba/Ganesha packages** not from the community version, but **rebuilt from RHGS sources** ([RHGS][17] is the downstream Gluster equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version
-* the **Openvswitch packages from RDO and OVN packages rebuilt from Fedora sources** of more recent versions
+* the **Openvswitch packages from RDO and OVN packages rebuilt from more recent sources**
   
   
 
@@ -225,7 +225,7 @@ We must also stress that, as a further form of provocation/_heresy_, our project
 Concluding we note that the project intends to work on the following pending points, in order of relevance:
 
 1. **Document what we did**, not only in form of comments inside scripts/Kickstarts and of this general overview, but also by adding a quickstart guide and a detailed technical guide;
-2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful (ideally not strictly depending on the Kickstart-based installations) and adhering to standards for playbooks/modules;
+2. **Improve the Ansible/gDeploy part** (now living in the [appropriate Github repository][64]) in order to make it generally useful (ideally not strictly depending on the Kickstart-based installations) and adhering to general standards for playbooks/modules;
 3. Investigate the feasibility and community interest for an **oVirt packages rebuild** project, not from community sources but **from RHV source packages** ([RHV][69] is the downstream oVirt equivalent sold by Red Hat bundled with a support contract) in order to extend the supported timeframe of each version.
   
 Among further future developments (some of which have been already started) there are also integrated solutions for:  
