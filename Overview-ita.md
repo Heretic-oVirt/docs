@@ -4,11 +4,11 @@
 
 ###  Di cosa si tratta 
 
-Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente ai singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [CTDB][19]/[Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
+Questo progetto mira all'approntamento automatizzato (non interattivo) e da zero (macchine nuove/riciclate) di una infrastruttura aziendale completa basata su [oVirt][10] con [Self Hosted Engine][60] (ovvero con l'oVirt Engine, la macchina di controllo dell'intera infrastruttura, ospitata come virtual machine all'interno dell'infrastruttura stessa), iperconvergente (ovvero con storage [Gluster][16] fornito dalle stesse macchine fisiche che fanno virtualizzazione), resistente a singoli guasti e con evolute funzionalità integrate di rete (tramite [OVN][18]) e di file sharing (tramite [CTDB][19]/[Samba][20]/[NFS-Ganesha][21]/[Gluster-Block][65]).  
   
 Quando diciamo "**infrastruttura aziendale completa**" intendiamo una soluzione (basata su hardware assolutamente standard: macchine a 64 bit Intel/AMD compatibili, del tutto generiche) che **realizzi tramite software libero tutte le funzionalità** che possono servire a realtà aziendali che vanno da quelle piccole/piccolissime fino a quelle medie/medio-grandi (ovviamente facendo crescere l'investimento hardware di conseguenza).  
 
-Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine di avere un "Software Defined Data center": [SDDC][70].
+Siccome creiamo tutto, dalla virtualizzazione allo storage e al networking, in software si può dire alla fine che abbiamo creato un "Software Defined Data center": [SDDC][70].
   
 ###  Il progetto
 
@@ -67,9 +67,9 @@ Il nostro laboratorio comprende tre diversi setup, due fisici ed uno virtuale, c
     * 5 porte di rete
 * 1 LAN virtuale in NAT e 4 segmenti LAN virtuali isolati
   
-Lo scopo del PC/VD generico è quello di fare da supporto solo durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
+Lo scopo del PC/VD generico è solo quello di fare da supporto durante l'installazione della soluzione e si suppone che, terminata l'installazione, possa essere dismesso.
 È stato sperimentato anche un setup misto nel quale solo il PC/VD generico è virtuale, ospitato su di un portatile dotato di 5 porte di rete (1 integrata e 4 con adattori Ethernet-USB).
-Infine, è stato recentemente provato un setup minimale con un solo server (richiede almeno la versione 4.2 di oVirt), ovviamente tralasciando pressoché tutte le funzionalità di resistenza ai guasti (rimanendo pur sempre valido come dimostrazione / prova di implementazione, o come soluzione iniziale per realtà molto piccole, in attesa di espanderla a tre server). 
+Infine, è stato recentemente provato un setup minimale con un solo server (richiede almeno la versione 4.2 di oVirt), ovviamente tralasciando pressoché tutte le funzionalità di resistenza ai guasti (rimanendo pur sempre valido come dimostrazione / prova di implementazione, o come soluzione iniziale per realtà molto piccole, passibile di espansione a tre server in un momento successivo). 
   
 
 ##  Le tecnologie di automazione
@@ -208,16 +208,16 @@ La configurazione automatizzata successiva (in parte in fase di sviluppo) è bas
 9. riconfigurano il Samba file server sui nodi Gluster come membro del dominio Active Directory di cui sopra
 10. installano e configurano una completa infrastruttura di backup (basata su [Bareos][27])
 
-L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con "ansible-playbook /usr/local/etc/hvp-ansible/hvp.yaml"), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
+L'avvio (come utente root dal PC/VD di supporto) dei passi qui sopra elencati dovrà essere interattivo (ad esempio con "ansible-playbook /usr/local/etc/hvp-ansible/site.yaml"), ma solo per dare modo a chi installa di scegliere il momento opportuno ed eventualmente apportare modifiche manuali preventive a parametri e passi: dopo l'avvio, tutto quanto avviene in maniera automatica.  
   
 Tutto il software utilizzato è presente (se modificato) in appositi [repository yum][25] con relativi pacchetti sorgenti (tutti i pacchetti sono prodotti usando mock e firmati con la [chiave GPG del progetto][26]).  
   
-Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno riguardato principalmente insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è però in previsione il supporto alla creazione iniziale di infrastrutture basate su **1 macchina server** o **4 e più macchine server** e pure il supporto al più spinoso problema dell'espansione di un setup esistente, ad esempio da 1 macchina server a 3 macchine server o da 3 macchine server a 4 e più macchine server.  
+Sottolineiamo il fatto che tutti i test e gli sviluppi compiuti finora hanno riguardato principalmente insiemi di **esattamente 3** **macchine server**, nel qual caso una delle 3, da installare come "Node 2" (ovvero quello indicato com "_l'ultimo server_" nelle specifiche hardware sopra citate), diverrà a livello Gluster per tutti i volumi un puro "**arbiter**" (ovvero non contiene/replica i dati dei file, ma solo i metadati), permettendo così di avere una macchina meno "carrozzata" delle altre due, quanto a dischi/CPU, senza influire sulle prestazioni globali; è comunque attualmente supportata la creazione di infrastrutture basate su **1 macchina server** (richiede almeno oVirt versione 4.2) mentre prevediamo di supportare a breve **4 e più macchine server** e pure il più spinoso problema dell'espansione di un setup esistente, ad esempio da 1 macchina server a 3 macchine server o da 3 macchine server a 4 e più macchine server.  
   
 Sottolineiamo anche che, come ennesima forma di provocazione/_eresia_, il nostro progetto utilizza (sempre prodotti e pubblicati come indicato sopra):  
 
 * i **pacchetti Gluster/Samba/Ganesha** non community, bensì **ricompilati dai sorgenti di RHGS** ([RHGS][17] è il Gluster con supporto offerto a pagamento da Red Hat) per motivi di estensione del ciclo di vita utile
-* i **pacchetti Openvswitch presi da RDO ed OVN ricompilati da versioni Fedora** più recenti
+* i **pacchetti Openvswitch presi da RDO ed OVN ricompilati da versioni più recenti** 
   
   
 
